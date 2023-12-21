@@ -48,25 +48,8 @@ class CurrentPlaceService @Inject constructor(
 
         Log.d("myLogs", "send request")
         return placesClient.findCurrentPlace(request)
-        /*val placeResponse = placesClient.findCurrentPlace(request)
-        placeResponse.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val response = task.result
-                for (placeLikelihood: PlaceLikelihood in response?.placeLikelihoods
-                    ?: emptyList()) {
-                    Log.i(
-                        "myLogs",
-                        "Place '${placeLikelihood.place.name}' has likelihood: ${placeLikelihood.likelihood}"
-                    )
-                }
-            } else {
-                val exception = task.exception
-                if (exception is ApiException) {
-                    Log.e("myLogs", "Place not found: ${exception.statusCode}")
-                }
-            }
-        }*/
-        }
+
+    }
 
 
 }

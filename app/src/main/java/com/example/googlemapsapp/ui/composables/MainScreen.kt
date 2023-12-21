@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.googlemapsapp.R
+import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 import com.example.googlemapsapp.view_models.SettingsViewModel
 
 sealed class Screen(
@@ -31,6 +33,11 @@ sealed class Screen(
         icon = Icons.Filled.Email,
         resourceId = R.string.map_bottom_nav
     )
+    object CurrentPlaces : Screen(
+        route = "current_places",
+        icon = Icons.Filled.Place,
+        resourceId = R.string.current_places_bottom_nav
+    )
     object Settings : Screen(
         route = "settings",
         icon = Icons.Filled.Settings,
@@ -40,11 +47,13 @@ sealed class Screen(
 
 val items = listOf(
     Screen.Map,
+    Screen.CurrentPlaces,
     Screen.Settings
 )
 
 @Composable
 fun MainScreen(
+    currentPlacesViewModel: CurrentPlacesViewModel,
     settingsViewModel: SettingsViewModel
 ){
 
@@ -85,6 +94,11 @@ fun MainScreen(
         ) {
             composable(Screen.Map.route) {
                 MapScreen()
+            }
+            composable(Screen.CurrentPlaces.route) {
+                CurrentPlacesScreen(
+                    currentPlacesUiState = currentPlacesViewModel.currentPlacesUiState
+                )
             }
             composable(Screen.Settings.route) {
                 SettingsScreen(settingsViewModel)
