@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.googlemapsapp.R
+import com.example.googlemapsapp.view_models.SettingsViewModel
 
 sealed class Screen(
     val route: String,
@@ -43,7 +44,9 @@ val items = listOf(
 )
 
 @Composable
-fun MainScreen(){
+fun MainScreen(
+    settingsViewModel: SettingsViewModel
+){
 
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -84,7 +87,7 @@ fun MainScreen(){
                 MapScreen()
             }
             composable(Screen.Settings.route) {
-                SettingsScreen()
+                SettingsScreen(settingsViewModel)
             }
         }
     }
