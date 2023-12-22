@@ -9,8 +9,12 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.PhotoMetadata
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.PlaceLikelihood
+import com.google.android.libraries.places.api.net.FetchPhotoRequest
+import com.google.android.libraries.places.api.net.FetchPhotoResponse
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
@@ -40,13 +44,24 @@ class CurrentPlaceService @Inject constructor(
     fun getCurrentLocationRequest(): Task<FindCurrentPlaceResponse> {
 
         // Use fields to define the data types to return.
-        val placeFields: List<Place.Field> = listOf(Place.Field.NAME, Place.Field.PHOTO_METADATAS)
+        val placeFields: List<Place.Field> = listOf(
+            Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS
+        )
 
         val request: FindCurrentPlaceRequest = FindCurrentPlaceRequest.newInstance(placeFields)
 
         Log.d("myLogs", "send request")
         return placesClient.findCurrentPlace(request)
 
+    }
+
+    fun getCurrentLocationPhoto(photoMetadata: PhotoMetadata): Task<FetchPhotoResponse>{
+        val placeFields: List<Place.Field> = listOf(
+            Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS
+        )
+
+        val request = FetchPhotoRequest.newInstance(photoMetadata)
+        return placesClient.fetchPhoto(request)
     }
 
 

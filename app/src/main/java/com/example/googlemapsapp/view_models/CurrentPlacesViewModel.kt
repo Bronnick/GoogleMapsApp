@@ -1,5 +1,6 @@
 package com.example.googlemapsapp.view_models
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -49,22 +50,26 @@ class CurrentPlacesViewModel @Inject constructor(
                     ?: emptyList()) {
                     Log.i(
                         "myLogs",
-                        "Place '${placeLikelihood.place.name}' has likelihood: ${placeLikelihood.likelihood}"
+                        "Id ${placeLikelihood.place.id} of Place '${placeLikelihood.place.name}' has likelihood: ${placeLikelihood.likelihood}"
                     )
                     Log.i("myLogs", "photo list size: ${placeLikelihood.place.photoMetadatas?.size}")
+
                     for(photo in placeLikelihood.place.photoMetadatas ?: emptyList()){
-                        Log.i("myLogs","Photo: ${photo.attributions
-                            .substringAfter('"').substringBefore('"')}")
+                        Log.i("myLogs", "photo: ${photo.zza()}")
                     }
                 }
+
+
                 val placeLikelihoods = response?.placeLikelihoods
+
                 val placesList = ArrayList<CurrentPlace>()
                 for(placeLikelihood in placeLikelihoods ?: emptyList()){
+
                     placesList.add(
                         CurrentPlace(
                             name = placeLikelihood.place.name ?: "undefined",
                             likelihood = placeLikelihood.likelihood,
-                            photos = placeLikelihood.place.photoMetadatas ?: emptyList()
+                            photo = placeLikelihood.place.photoMetadatas?.get(0)?.zza()
                         )
                     )
                 }
