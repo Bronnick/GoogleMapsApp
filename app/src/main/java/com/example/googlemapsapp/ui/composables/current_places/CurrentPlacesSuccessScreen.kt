@@ -18,8 +18,7 @@ fun CurrentPlacesSuccessScreen(
     ){
         items(currentPlaces){ place ->
             PlaceOverview(
-                name = place.name,
-                likelihood = place.likelihood
+                place = place
             )
         }
     }

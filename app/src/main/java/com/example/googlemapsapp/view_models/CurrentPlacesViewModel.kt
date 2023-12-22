@@ -51,13 +51,20 @@ class CurrentPlacesViewModel @Inject constructor(
                         "myLogs",
                         "Place '${placeLikelihood.place.name}' has likelihood: ${placeLikelihood.likelihood}"
                     )
+                    Log.i("myLogs", "photo list size: ${placeLikelihood.place.photoMetadatas?.size}")
+                    for(photo in placeLikelihood.place.photoMetadatas ?: emptyList()){
+                        Log.i("myLogs","Photo: ${photo.attributions
+                            .substringAfter('"').substringBefore('"')}")
+                    }
                 }
                 val placeLikelihoods = response?.placeLikelihoods
                 val placesList = ArrayList<CurrentPlace>()
                 for(placeLikelihood in placeLikelihoods ?: emptyList()){
                     placesList.add(
                         CurrentPlace(
-                        placeLikelihood.place.name ?: "undefined", placeLikelihood.likelihood
+                            name = placeLikelihood.place.name ?: "undefined",
+                            likelihood = placeLikelihood.likelihood,
+                            photos = placeLikelihood.place.photoMetadatas ?: emptyList()
                         )
                     )
                 }

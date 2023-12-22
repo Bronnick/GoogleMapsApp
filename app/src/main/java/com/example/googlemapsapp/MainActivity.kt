@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
 
         //currentPlaceRepository.getCurrentPlacesLikelihood()
 
-        currentPlaceRepository.getCurrentPlaces()
+        //currentPlaceRepository.getCurrentPlaces()
 
         setContent {
             GoogleMapsAppTheme {

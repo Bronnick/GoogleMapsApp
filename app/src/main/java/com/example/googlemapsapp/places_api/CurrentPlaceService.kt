@@ -22,7 +22,6 @@ import javax.inject.Singleton
 class CurrentPlaceService @Inject constructor(
     @ApplicationContext private val applicationContext: Context
 ){
-    private val placeFields: List<Place.Field> = listOf(Place.Field.NAME)
 
     var placesClient: PlacesClient
 
@@ -41,9 +40,8 @@ class CurrentPlaceService @Inject constructor(
     fun getCurrentLocationRequest(): Task<FindCurrentPlaceResponse> {
 
         // Use fields to define the data types to return.
-        val placeFields: List<Place.Field> = listOf(Place.Field.NAME)
+        val placeFields: List<Place.Field> = listOf(Place.Field.NAME, Place.Field.PHOTO_METADATAS)
 
-// Use tuilder to create a FindCurrentPlaceRequest.
         val request: FindCurrentPlaceRequest = FindCurrentPlaceRequest.newInstance(placeFields)
 
         Log.d("myLogs", "send request")
