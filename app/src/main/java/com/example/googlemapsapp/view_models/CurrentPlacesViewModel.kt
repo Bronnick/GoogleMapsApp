@@ -34,6 +34,9 @@ class CurrentPlacesViewModel @Inject constructor(
 ) : ViewModel() {
     var currentPlacesUiState: CurrentPlacesUiState by mutableStateOf(CurrentPlacesUiState.Loading)
         private set
+
+    var test: String by mutableStateOf("test")
+
     init{
         viewModelScope.launch {
             getCurrentPlaces()
@@ -69,7 +72,8 @@ class CurrentPlacesViewModel @Inject constructor(
                         CurrentPlace(
                             name = placeLikelihood.place.name ?: "undefined",
                             likelihood = placeLikelihood.likelihood,
-                            photo = placeLikelihood.place.photoMetadatas?.get(0)?.zza()
+                            photo = placeLikelihood.place.photoMetadatas?.get(0)?.zza(),
+                            isFavorite = false
                         )
                     )
                 }
@@ -82,6 +86,13 @@ class CurrentPlacesViewModel @Inject constructor(
                 }
             }
         }
+    }
 
+    fun changePlaceFavoriteStatus(place: CurrentPlace) {
+        /*try{
+            (currentPlacesUiState as CurrentPlacesUiState.Success).places.
+        }*/
+        place.isFavorite = !place.isFavorite
+        Log.d("myLogs", "Place: ${place.name}, ${place.isFavorite}")
     }
 }

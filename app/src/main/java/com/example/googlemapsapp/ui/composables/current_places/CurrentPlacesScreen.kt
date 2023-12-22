@@ -1,4 +1,4 @@
-package com.example.googlemapsapp.ui.composables
+package com.example.googlemapsapp.ui.composables.current_places
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
@@ -10,11 +10,12 @@ import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 
 @Composable
 fun CurrentPlacesScreen(
-    currentPlacesUiState: CurrentPlacesUiState
+    viewModel: CurrentPlacesViewModel
 ) {
-    when(currentPlacesUiState){
+    when(val currentPlacesUiState = viewModel.currentPlacesUiState){
         is CurrentPlacesUiState.Success -> CurrentPlacesSuccessScreen(
-            currentPlaces = currentPlacesUiState.places
+            currentPlaces = currentPlacesUiState.places,
+            viewModel = viewModel
         )
         is CurrentPlacesUiState.Loading -> CurrentPlacesLoadingScreen()
         is CurrentPlacesUiState.Error -> CurrentPlacesErrorScreen(

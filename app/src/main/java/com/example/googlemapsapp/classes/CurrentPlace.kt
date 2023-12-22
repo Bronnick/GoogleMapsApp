@@ -6,5 +6,6 @@ import com.google.android.libraries.places.api.model.PhotoMetadata
 data class CurrentPlace (
     val name: String,
     val likelihood: Double,
-    val photo: String?
+    val photo: String?,
+    var isFavorite: Boolean
 )

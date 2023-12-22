@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.googlemapsapp.R
+import com.example.googlemapsapp.ui.composables.current_places.CurrentPlacesScreen
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 import com.example.googlemapsapp.view_models.SettingsViewModel
 
@@ -97,7 +98,7 @@ fun MainScreen(
             }
             composable(Screen.CurrentPlaces.route) {
                 CurrentPlacesScreen(
-                    currentPlacesUiState = currentPlacesViewModel.currentPlacesUiState
+                    viewModel = currentPlacesViewModel
                 )
             }
             composable(Screen.Settings.route) {
