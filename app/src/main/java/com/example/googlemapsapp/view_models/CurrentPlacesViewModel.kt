@@ -10,7 +10,9 @@ import com.example.googlemapsapp.repositories.PlacesRepository
 import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.model.PlaceLikelihood
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -32,15 +34,28 @@ class CurrentPlacesViewModel @Inject constructor(
     var currentPlacesUiState: CurrentPlacesUiState by mutableStateOf(CurrentPlacesUiState.Loading)
         private set
 
+    val placesList = ArrayList<Place>()
+
     var test: String by mutableStateOf("test")
 
-    init{
+    init {
         viewModelScope.launch {
             getCurrentPlaces()
+            val favoritePlaces = currentPlacesRepository.getFavoritePlaces()
+            favoritePlaces.collect{
+                for(item in it){
+                    for(el in placesList){
+                        if(el.placeId == item.placeId){
+                            el.isFavorite = true
+                            Log.d("myLogs", "Place: ${item.placeId} ${el.placeId}")
+                        }
+                    }
+                }
+            }
         }
     }
 
-    private fun getCurrentPlaces(){
+    private suspend fun getCurrentPlaces(){
 
         val placeResponse = currentPlacesRepository.getCurrentPlaces()
         placeResponse.addOnCompleteListener { task ->
@@ -62,18 +77,25 @@ class CurrentPlacesViewModel @Inject constructor(
 
                 val placeLikelihoods = response?.placeLikelihoods
 
-                val placesList = ArrayList<Place>()
                 for(placeLikelihood in placeLikelihoods ?: emptyList()){
+                    viewModelScope.launch {
+                        withContext(Dispatchers.IO) {
+                            var isFavorite = false
+                            if (currentPlacesRepository.getPlaceById(placeLikelihood.place.id!!) != null) {
+                                isFavorite = true
+                            }
 
-                    placesList.add(
-                        Place(
-                            placeId = placeLikelihood.place.id ?: "",
-                            name = placeLikelihood.place.name ?: "undefined",
-                            likelihood = placeLikelihood.likelihood,
-                            photo = placeLikelihood.place.photoMetadatas?.get(0)?.zza(),
-                            isFavorite = false
-                        )
-                    )
+                            placesList.add(
+                                Place(
+                                    placeId = placeLikelihood.place.id ?: "",
+                                    name = placeLikelihood.place.name ?: "undefined",
+                                    likelihood = placeLikelihood.likelihood,
+                                    photoRef = placeLikelihood.place.photoMetadatas?.get(0)?.zza(),
+                                    isFavorite = isFavorite
+                                )
+                            )
+                        }
+                    }
                 }
                 currentPlacesUiState = CurrentPlacesUiState.Success(placesList)
             } else {
@@ -96,12 +118,10 @@ class CurrentPlacesViewModel @Inject constructor(
         if(place.isFavorite) {
             viewModelScope.launch {
                 currentPlacesRepository.insertPlace(place)
-                val favoritePlaces = currentPlacesRepository.getFavoritePlaces()
-                favoritePlaces.collect{
-                    for(item in it){
-                        Log.d("myLogs", "Place: ${item.name}")
-                    }
-                }
+            }
+        } else{
+            viewModelScope.launch {
+                currentPlacesRepository.deletePlace(place)
             }
         }
     }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
@@ -21,7 +22,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.googlemapsapp.R
 import com.example.googlemapsapp.ui.composables.current_places.CurrentPlacesScreen
+import com.example.googlemapsapp.ui.composables.favorites.FavouritePlacesScreen
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
+import com.example.googlemapsapp.view_models.FavouritePlacesViewModel
 import com.example.googlemapsapp.view_models.SettingsViewModel
 
 sealed class Screen(
@@ -39,6 +42,11 @@ sealed class Screen(
         icon = Icons.Filled.Place,
         resourceId = R.string.current_places_bottom_nav
     )
+    object FavoritePlaces : Screen(
+        route = "favorite_places",
+        icon = Icons.Filled.Favorite,
+        resourceId = R.string.favorite_places_bottom_nav
+    )
     object Settings : Screen(
         route = "settings",
         icon = Icons.Filled.Settings,
@@ -49,12 +57,14 @@ sealed class Screen(
 val items = listOf(
     Screen.Map,
     Screen.CurrentPlaces,
+    Screen.FavoritePlaces,
     Screen.Settings
 )
 
 @Composable
 fun MainScreen(
     currentPlacesViewModel: CurrentPlacesViewModel,
+    favouritePlacesViewModel: FavouritePlacesViewModel,
     settingsViewModel: SettingsViewModel
 ){
 
@@ -100,6 +110,9 @@ fun MainScreen(
                 CurrentPlacesScreen(
                     viewModel = currentPlacesViewModel
                 )
+            }
+            composable(Screen.FavoritePlaces.route) {
+                FavouritePlacesScreen(viewModel = favouritePlacesViewModel)
             }
             composable(Screen.Settings.route) {
                 SettingsScreen(settingsViewModel)

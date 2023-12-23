@@ -13,6 +13,9 @@ interface PlaceDao {
     @Query("SELECT * FROM places")
     fun getPlaces(): Flow<List<Place>>
 
+    @Query("SELECT * FROM places WHERE id = :placeId")
+    fun getPlaceById(placeId: String): Place?
+
     @Insert
     suspend fun insertPlace(place: Place)
 

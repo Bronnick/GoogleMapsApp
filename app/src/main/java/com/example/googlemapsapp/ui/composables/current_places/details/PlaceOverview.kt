@@ -50,7 +50,7 @@ fun PlaceOverview(
                     modifier = Modifier.size(150.dp),
                     model = stringResource(
                         id = R.string.photo_ref,
-                        place.photo ?: ""
+                        place.photoRef ?: ""
                     ),
                     contentDescription = null
                 )
@@ -62,7 +62,7 @@ fun PlaceOverview(
                 )
             }
             Text(
-                text = place.likelihood.toString(),
+                text = place.placeId,
                 textAlign = TextAlign.End
             )
 

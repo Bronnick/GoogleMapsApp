@@ -2,16 +2,19 @@ package com.example.googlemapsapp.view_models
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.google.android.libraries.places.api.model.Place
+import com.example.googlemapsapp.repositories.PlacesRepository
+import com.example.googlemapsapp.classes.Place
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class FavouritePlacesViewModel(
-
+@HiltViewModel
+class FavouritePlacesViewModel @Inject constructor(
+    placesRepository: PlacesRepository
 ) : ViewModel() {
 
-    init {
-
-    }
-
+    val favoritePlaces: Flow<List<Place>> =
+        placesRepository.getFavoritePlaces()
 
 }
 

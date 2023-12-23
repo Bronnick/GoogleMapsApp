@@ -3,5 +3,6 @@
     <string name="settings">Settings</string>
     <string name="map_bottom_nav">Map</string>
     <string name="current_places_bottom_nav">Nearby places</string>
+    <string name="favorite_places_bottom_nav">Favorite</string>
     <string name="photo_ref">https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&amp;photo_reference=%1$s&amp;key=AIzaSyBlrwhE1xSDXu-sH-BCHpxRNLZy8iFKlek</string>
 </resources>

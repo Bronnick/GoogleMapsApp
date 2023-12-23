@@ -11,7 +11,9 @@ import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class PlacesRepository @Inject constructor(
     @ApplicationContext private val applicationContext: Context,
     private val currentPlaceService: CurrentPlaceService,
@@ -32,8 +34,32 @@ class PlacesRepository @Inject constructor(
 
     fun getFavoritePlaces() = placeDao.getPlaces()
 
+    fun getPlaceById(placeId: String) = placeDao.getPlaceById(placeId)
+
     suspend fun insertPlace(place: Place) {
         placeDao.insertPlace(place)
+    }
+
+    suspend fun deletePlace(place: Place) {
+        placeDao.deletePlace(place)
+    }
+
+    companion object {
+        @Volatile private var instance: PlacesRepository? = null
+
+        fun getInstance(
+            applicationContext: Context,
+            currentPlaceService: CurrentPlaceService,
+            placeDao: PlaceDao
+        ): PlacesRepository {
+            return instance ?: synchronized(this) {
+                instance ?: PlacesRepository(
+                    applicationContext,
+                    currentPlaceService,
+                    placeDao
+                ).also { instance = it }
+            }
+        }
     }
 
 }

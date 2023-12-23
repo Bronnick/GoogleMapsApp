@@ -12,6 +12,7 @@ import com.example.googlemapsapp.repositories.PlacesRepository
 import com.example.googlemapsapp.ui.composables.MainScreen
 import com.example.googlemapsapp.ui.theme.GoogleMapsAppTheme
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
+import com.example.googlemapsapp.view_models.FavouritePlacesViewModel
 import com.example.googlemapsapp.view_models.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -23,6 +24,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val currentPlacesViewModel: CurrentPlacesViewModel by viewModels()
+        val favouritePlacesViewModel: FavouritePlacesViewModel by viewModels()
         val settingsViewModel: SettingsViewModel by viewModels()
 //        placesService1.sendCurrentLocationRequest()
 //        placesService2.sendCurrentLocationRequest()
@@ -41,6 +43,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MainScreen(
                         currentPlacesViewModel = currentPlacesViewModel,
+                        favouritePlacesViewModel = favouritePlacesViewModel,
                         settingsViewModel = settingsViewModel
                     )
                 }
