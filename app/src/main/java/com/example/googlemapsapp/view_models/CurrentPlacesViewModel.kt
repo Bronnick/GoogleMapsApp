@@ -1,25 +1,22 @@
 package com.example.googlemapsapp.view_models
 
-import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.googlemapsapp.classes.CurrentPlace
-import com.example.googlemapsapp.repositories.CurrentPlacesRepository
+import com.example.googlemapsapp.classes.Place
+import com.example.googlemapsapp.repositories.PlacesRepository
 import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.model.PlaceLikelihood
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 sealed interface CurrentPlacesUiState{
     data class Success(
-        val places: List<CurrentPlace>
+        val places: List<Place>
     ) : CurrentPlacesUiState
     object Loading : CurrentPlacesUiState
 
@@ -30,7 +27,7 @@ sealed interface CurrentPlacesUiState{
 
 @HiltViewModel
 class CurrentPlacesViewModel @Inject constructor(
-    private val currentPlacesRepository: CurrentPlacesRepository
+    private val currentPlacesRepository: PlacesRepository
 ) : ViewModel() {
     var currentPlacesUiState: CurrentPlacesUiState by mutableStateOf(CurrentPlacesUiState.Loading)
         private set
@@ -65,11 +62,12 @@ class CurrentPlacesViewModel @Inject constructor(
 
                 val placeLikelihoods = response?.placeLikelihoods
 
-                val placesList = ArrayList<CurrentPlace>()
+                val placesList = ArrayList<Place>()
                 for(placeLikelihood in placeLikelihoods ?: emptyList()){
 
                     placesList.add(
-                        CurrentPlace(
+                        Place(
+                            placeId = placeLikelihood.place.id ?: "",
                             name = placeLikelihood.place.name ?: "undefined",
                             likelihood = placeLikelihood.likelihood,
                             photo = placeLikelihood.place.photoMetadatas?.get(0)?.zza(),
@@ -88,11 +86,23 @@ class CurrentPlacesViewModel @Inject constructor(
         }
     }
 
-    fun changePlaceFavoriteStatus(place: CurrentPlace) {
+    fun changePlaceFavoriteStatus(place: Place) {
         /*try{
             (currentPlacesUiState as CurrentPlacesUiState.Success).places.
         }*/
         place.isFavorite = !place.isFavorite
         Log.d("myLogs", "Place: ${place.name}, ${place.isFavorite}")
+
+        if(place.isFavorite) {
+            viewModelScope.launch {
+                currentPlacesRepository.insertPlace(place)
+                val favoritePlaces = currentPlacesRepository.getFavoritePlaces()
+                favoritePlaces.collect{
+                    for(item in it){
+                        Log.d("myLogs", "Place: ${item.name}")
+                    }
+                }
+            }
+        }
     }
 }

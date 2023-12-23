@@ -1,6 +1,5 @@
 package com.example.googlemapsapp.ui.composables.current_places.details
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -10,15 +9,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.googlemapsapp.R
-import com.example.googlemapsapp.classes.CurrentPlace
-import com.google.android.libraries.places.api.model.PlaceLikelihood
+import com.example.googlemapsapp.classes.Place
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
@@ -27,7 +23,7 @@ val photoExample = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=40
 
 @Composable
 fun PlaceOverview(
-    place: CurrentPlace,
+    place: Place,
     onFavoritesIconClick: () -> Unit,
     viewModel: CurrentPlacesViewModel
 ) {
@@ -71,7 +67,10 @@ fun PlaceOverview(
             )
 
             IconButton(
-                onClick = { favoriteState = !favoriteState }
+                onClick = {
+                    favoriteState = !favoriteState
+                    onFavoritesIconClick()
+                }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Favorite /*if(place.isFavorite) Icons.Default.Favorite

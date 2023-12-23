@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import com.example.googlemapsapp.repositories.CurrentPlacesRepository
+import com.example.googlemapsapp.repositories.PlacesRepository
 import com.example.googlemapsapp.ui.composables.MainScreen
 import com.example.googlemapsapp.ui.theme.GoogleMapsAppTheme
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject lateinit var currentPlaceRepository: CurrentPlacesRepository
+    @Inject lateinit var currentPlaceRepository: PlacesRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
