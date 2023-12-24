@@ -8,9 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.googlemapsapp.classes.Place
 import com.example.googlemapsapp.repositories.PlacesRepository
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.PlaceLikelihood
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -18,7 +21,7 @@ import javax.inject.Inject
 
 sealed interface CurrentPlacesUiState{
     data class Success(
-        val places: List<Place>
+        val places: Flow<List<Place>>
     ) : CurrentPlacesUiState
     object Loading : CurrentPlacesUiState
 
@@ -90,6 +93,8 @@ class CurrentPlacesViewModel @Inject constructor(
                                     placeId = placeLikelihood.place.id ?: "",
                                     name = placeLikelihood.place.name ?: "undefined",
                                     likelihood = placeLikelihood.likelihood,
+                                    latitude = placeLikelihood.place.latLng?.latitude ?: 0.0,
+                                    longitude = placeLikelihood.place.latLng?.longitude ?: 0.0,
                                     photoRef = placeLikelihood.place.photoMetadatas?.get(0)?.zza(),
                                     isFavorite = isFavorite
                                 )
@@ -97,7 +102,9 @@ class CurrentPlacesViewModel @Inject constructor(
                         }
                     }
                 }
-                currentPlacesUiState = CurrentPlacesUiState.Success(placesList)
+                val outerList = ArrayList<List<Place>>()
+                outerList.add(placesList)
+                currentPlacesUiState = CurrentPlacesUiState.Success(outerList.asFlow())
             } else {
                 val exception = task.exception
                 if (exception is ApiException) {

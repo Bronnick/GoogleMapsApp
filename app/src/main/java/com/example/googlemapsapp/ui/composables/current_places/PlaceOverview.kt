@@ -1,4 +1,4 @@
-package com.example.googlemapsapp.ui.composables.current_places.details
+package com.example.googlemapsapp.ui.composables.current_places
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -55,11 +55,20 @@ fun PlaceOverview(
                     contentDescription = null
                 )
 
-                Text(
-                    modifier = Modifier.padding(start = 8.dp, top = 16.dp),
-                    text = place.isFavorite.toString(),
-                    textAlign = TextAlign.End,
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        modifier = Modifier.padding(start = 8.dp, top = 16.dp),
+                        text = place.isFavorite.toString(),
+                        textAlign = TextAlign.End,
+                    )
+                    Text(
+                        modifier = Modifier.padding(start = 8.dp, top = 16.dp),
+                        text = "${place.latitude}, ${place.longitude}",
+                        textAlign = TextAlign.End,
+                    )
+                }
             }
             Text(
                 text = place.placeId,

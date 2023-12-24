@@ -45,7 +45,8 @@ class CurrentPlaceService @Inject constructor(
 
         // Use fields to define the data types to return.
         val placeFields: List<Place.Field> = listOf(
-            Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS
+            Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS,
+            Place.Field.LAT_LNG
         )
 
         val request: FindCurrentPlaceRequest = FindCurrentPlaceRequest.newInstance(placeFields)
@@ -57,7 +58,8 @@ class CurrentPlaceService @Inject constructor(
 
     fun getCurrentLocationPhoto(photoMetadata: PhotoMetadata): Task<FetchPhotoResponse>{
         val placeFields: List<Place.Field> = listOf(
-            Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS
+            Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS,
+            Place.Field.LAT_LNG
         )
 
         val request = FetchPhotoRequest.newInstance(photoMetadata)
