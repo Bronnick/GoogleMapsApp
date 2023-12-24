@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun CurrentPlacesSuccessScreen(
-    viewModel: CurrentPlacesViewModel
+    viewModel: CurrentPlacesViewModel,
+    onShowOnMapButtonClick: (Place) -> Unit
 ) {
     val placeList by (viewModel.currentPlacesUiState as CurrentPlacesUiState.Success).places.collectAsState(
         initial = emptyList()
@@ -29,7 +30,8 @@ fun CurrentPlacesSuccessScreen(
                 onFavoritesIconClick = {
                     viewModel.changePlaceFavoriteStatus(place)
                 },
-                viewModel = viewModel
+                viewModel = viewModel,
+                onShowOnMapButtonClick = onShowOnMapButtonClick
             )
         }
     }

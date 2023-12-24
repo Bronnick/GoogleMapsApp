@@ -23,9 +23,10 @@ val photoExample = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=40
 
 @Composable
 fun PlaceOverview(
+    viewModel: CurrentPlacesViewModel,
     place: Place,
     onFavoritesIconClick: () -> Unit,
-    viewModel: CurrentPlacesViewModel
+    onShowOnMapButtonClick: (Place) -> Unit
 ) {
     var favoriteState by remember {
         mutableStateOf(place.isFavorite)
@@ -75,18 +76,32 @@ fun PlaceOverview(
                 textAlign = TextAlign.End
             )
 
-            IconButton(
-                onClick = {
-                    favoriteState = !favoriteState
-                    onFavoritesIconClick()
-                }
+            Row(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Favorite /*if(place.isFavorite) Icons.Default.Favorite
+                IconButton(
+                    onClick = {
+                        favoriteState = !favoriteState
+                        onFavoritesIconClick()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Favorite /*if(place.isFavorite) Icons.Default.Favorite
                                     else Icons.Filled.Favorite*/,
-                    tint = if(favoriteState) Color.Red else Color.Unspecified,
-                    contentDescription = null
-                )
+                        tint = if (favoriteState) Color.Red else Color.Unspecified,
+                        contentDescription = null
+                    )
+                }
+
+                Button(
+                    onClick = {
+                        onShowOnMapButtonClick(place)
+                    }
+                ) {
+                    Text(
+                        text = "Show on map"
+                    )
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.googlemapsapp.ui.composables
+package com.example.googlemapsapp.ui.composables.map
 
 import android.Manifest
 import androidx.compose.foundation.background
@@ -18,9 +18,13 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 
+
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun MapScreen() {
+fun MapScreen(
+    latitude: Float,
+    longitude: Float
+) {
     val multiplePermissionState = rememberMultiplePermissionsState(
         permissions = listOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -29,7 +33,7 @@ fun MapScreen() {
     )
 
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(LatLng(44.810058, 20.4617586), 17f)
+        position = CameraPosition.fromLatLngZoom(LatLng(latitude.toDouble(), longitude.toDouble()), 17f)
     }
 
     LaunchedEffect(Unit) {
@@ -61,7 +65,10 @@ fun MapScreen() {
                 properties = MapProperties(isMyLocationEnabled = true),
                 uiSettings = MapUiSettings(compassEnabled = true)
             ) {
-                GoogleMarkers()
+                PlaceMarker(
+                    latitude = latitude.toDouble(),
+                    longitude = longitude.toDouble(),
+                )
                 Polyline(
                     points = listOf(
                         LatLng(44.811058, 20.4617586),
