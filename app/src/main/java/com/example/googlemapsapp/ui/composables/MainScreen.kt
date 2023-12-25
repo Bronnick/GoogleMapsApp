@@ -23,6 +23,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.googlemapsapp.R
+import com.example.googlemapsapp.classes.Place
 import com.example.googlemapsapp.ui.composables.current_places.CurrentPlacesScreen
 import com.example.googlemapsapp.ui.composables.favorites.FavouritePlacesScreen
 import com.example.googlemapsapp.ui.composables.map.MapScreen
@@ -101,6 +102,24 @@ fun MainScreen(
             }
         }
     ) {
+        val onShowOnMapButtonClick: (Place) -> Unit = { place ->
+            navController.navigate(
+                Screen.Map.route.replace(
+                    oldValue = "{lat}",
+                    newValue = place.latitude.toString()
+                ).replace(
+                    oldValue = "{lng}",
+                    newValue = place.longitude.toString()
+                )
+            ) {
+                popUpTo(navController.graph.findStartDestination().id){
+                    saveState  = true
+                }
+                launchSingleTop = true
+                //restoreState = true
+            }
+        }
+
         NavHost(
             navController = navController,
             startDestination = Screen.CurrentPlaces.route,
@@ -127,27 +146,14 @@ fun MainScreen(
             composable(Screen.CurrentPlaces.route) {
                 CurrentPlacesScreen(
                     viewModel = currentPlacesViewModel,
-                    onShowOnMapButtonClick = { place ->
-                        navController.navigate(
-                            Screen.Map.route.replace(
-                                oldValue = "{lat}",
-                                newValue = place.latitude.toString()
-                            ).replace(
-                                oldValue = "{lng}",
-                                newValue = place.longitude.toString()
-                            )
-                        ) {
-                            popUpTo(navController.graph.findStartDestination().id){
-                                saveState  = true
-                            }
-                            launchSingleTop = true
-                            //restoreState = true
-                        }
-                    }
+                    onShowOnMapButtonClick = onShowOnMapButtonClick
                 )
             }
             composable(Screen.FavoritePlaces.route) {
-                FavouritePlacesScreen(viewModel = favouritePlacesViewModel)
+                FavouritePlacesScreen(
+                    viewModel = favouritePlacesViewModel,
+                    onShowOnMapButtonClick = onShowOnMapButtonClick
+                )
             }
             composable(Screen.Settings.route) {
                 SettingsScreen(settingsViewModel)

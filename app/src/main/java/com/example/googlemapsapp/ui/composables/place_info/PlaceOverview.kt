@@ -1,4 +1,4 @@
-package com.example.googlemapsapp.ui.composables.current_places
+package com.example.googlemapsapp.ui.composables.place_info
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -23,10 +23,10 @@ val photoExample = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=40
 
 @Composable
 fun PlaceOverview(
-    viewModel: CurrentPlacesViewModel,
     place: Place,
-    onFavoritesIconClick: () -> Unit,
-    onShowOnMapButtonClick: (Place) -> Unit
+    onFavoritesIconClick: () -> Unit = {},
+    onShowOnMapButtonClick: (Place) -> Unit,
+    isFavoriteScreen: Boolean
 ) {
     var favoriteState by remember {
         mutableStateOf(place.isFavorite)
@@ -79,18 +79,20 @@ fun PlaceOverview(
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                IconButton(
-                    onClick = {
-                        favoriteState = !favoriteState
-                        onFavoritesIconClick()
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Favorite /*if(place.isFavorite) Icons.Default.Favorite
+                if(isFavoriteScreen) {
+                    IconButton(
+                        onClick = {
+                            favoriteState = !favoriteState
+                            onFavoritesIconClick()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Favorite /*if(place.isFavorite) Icons.Default.Favorite
                                     else Icons.Filled.Favorite*/,
-                        tint = if (favoriteState) Color.Red else Color.Unspecified,
-                        contentDescription = null
-                    )
+                            tint = if (favoriteState) Color.Red else Color.Unspecified,
+                            contentDescription = null
+                        )
+                    }
                 }
 
                 Button(

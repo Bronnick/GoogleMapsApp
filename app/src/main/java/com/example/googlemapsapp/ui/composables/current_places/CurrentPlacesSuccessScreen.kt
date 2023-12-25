@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.example.googlemapsapp.classes.Place
 import androidx.compose.runtime.*
+import com.example.googlemapsapp.ui.composables.place_info.PlaceOverview
 import com.example.googlemapsapp.view_models.CurrentPlacesUiState
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 import kotlinx.coroutines.flow.Flow
@@ -30,8 +31,8 @@ fun CurrentPlacesSuccessScreen(
                 onFavoritesIconClick = {
                     viewModel.changePlaceFavoriteStatus(place)
                 },
-                viewModel = viewModel,
-                onShowOnMapButtonClick = onShowOnMapButtonClick
+                onShowOnMapButtonClick = onShowOnMapButtonClick,
+                isFavoriteScreen = true
             )
         }
     }

@@ -8,12 +8,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.example.googlemapsapp.classes.Place
 import androidx.compose.runtime.*
-import com.example.googlemapsapp.ui.composables.favorites.details.PlaceOverview
+import com.example.googlemapsapp.ui.composables.place_info.PlaceOverview
 import com.example.googlemapsapp.view_models.FavouritePlacesViewModel
 
 @Composable
 fun FavouritePlacesScreen(
-    viewModel: FavouritePlacesViewModel
+    viewModel: FavouritePlacesViewModel,
+    onShowOnMapButtonClick: (Place) -> Unit
 ) {
     val placeList by viewModel.favoritePlaces.collectAsState(initial = emptyList())
 
@@ -23,7 +24,8 @@ fun FavouritePlacesScreen(
         items(placeList) { place ->
             PlaceOverview(
                 place = place,
-                viewModel = viewModel
+                onShowOnMapButtonClick = onShowOnMapButtonClick,
+                isFavoriteScreen = false
             )
         }
     }
