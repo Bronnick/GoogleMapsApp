@@ -14,13 +14,15 @@ import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 @Composable
 fun CurrentPlacesScreen(
     viewModel: CurrentPlacesViewModel,
-    onShowOnMapButtonClick: (Place) -> Unit
+    onShowOnMapButtonClick: (Place) -> Unit,
+    onViewDetailsButtonClick: (Place) -> Unit,
 ) {
 
     when(val currentPlacesUiState = viewModel.currentPlacesUiState){
         is CurrentPlacesUiState.Success -> CurrentPlacesSuccessScreen(
             viewModel = viewModel,
-            onShowOnMapButtonClick = onShowOnMapButtonClick
+            onShowOnMapButtonClick = onShowOnMapButtonClick,
+            onViewDetailsButtonClick = onViewDetailsButtonClick
         )
         is CurrentPlacesUiState.Loading -> CurrentPlacesLoadingScreen()
         is CurrentPlacesUiState.Error -> CurrentPlacesErrorScreen(

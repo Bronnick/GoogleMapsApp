@@ -146,13 +146,15 @@ fun MainScreen(
             composable(Screen.CurrentPlaces.route) {
                 CurrentPlacesScreen(
                     viewModel = currentPlacesViewModel,
-                    onShowOnMapButtonClick = onShowOnMapButtonClick
+                    onShowOnMapButtonClick = onShowOnMapButtonClick,
+                    onViewDetailsButtonClick = {}
                 )
             }
             composable(Screen.FavoritePlaces.route) {
                 FavouritePlacesScreen(
                     viewModel = favouritePlacesViewModel,
-                    onShowOnMapButtonClick = onShowOnMapButtonClick
+                    onShowOnMapButtonClick = onShowOnMapButtonClick,
+                    onViewDetailsButtonClick = {}
                 )
             }
             composable(Screen.Settings.route) {

@@ -19,20 +19,12 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject lateinit var currentPlaceRepository: PlacesRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val currentPlacesViewModel: CurrentPlacesViewModel by viewModels()
         val favouritePlacesViewModel: FavouritePlacesViewModel by viewModels()
         val settingsViewModel: SettingsViewModel by viewModels()
-//        placesService1.sendCurrentLocationRequest()
-//        placesService2.sendCurrentLocationRequest()
-
-
-        //currentPlaceRepository.getCurrentPlacesLikelihood()
-
-        //currentPlaceRepository.getCurrentPlaces()
 
         setContent {
             GoogleMapsAppTheme {

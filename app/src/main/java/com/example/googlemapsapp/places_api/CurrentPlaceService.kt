@@ -45,8 +45,12 @@ class CurrentPlaceService @Inject constructor(
 
         // Use fields to define the data types to return.
         val placeFields: List<Place.Field> = listOf(
-            Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS,
-            Place.Field.LAT_LNG
+            Place.Field.ID,
+            Place.Field.NAME,
+            Place.Field.PHOTO_METADATAS,
+            Place.Field.LAT_LNG,
+            Place.Field.ADDRESS,
+            Place.Field.RATING
         )
 
         val request: FindCurrentPlaceRequest = FindCurrentPlaceRequest.newInstance(placeFields)

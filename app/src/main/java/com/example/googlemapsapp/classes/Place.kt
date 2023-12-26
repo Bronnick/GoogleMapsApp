@@ -22,6 +22,10 @@ data class Place (
 
     val photoRef: String?,
 
+    val address: String?,
+
+    val rating: Double?,
+
     @ColumnInfo(name = "is_favorite")
     var isFavorite: Boolean
 ) {

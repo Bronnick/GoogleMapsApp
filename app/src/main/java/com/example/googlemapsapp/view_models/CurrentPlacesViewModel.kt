@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.viewModelScope
 import com.example.googlemapsapp.classes.Place
 import com.example.googlemapsapp.repositories.PlacesRepository
+import com.example.googlemapsapp.ui.composables.place_info.photoExample
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.PlaceLikelihood
@@ -96,6 +97,8 @@ class CurrentPlacesViewModel @Inject constructor(
                                     latitude = placeLikelihood.place.latLng?.latitude ?: 0.0,
                                     longitude = placeLikelihood.place.latLng?.longitude ?: 0.0,
                                     photoRef = placeLikelihood.place.photoMetadatas?.get(0)?.zza(),
+                                    address = placeLikelihood.place.address,
+                                    rating = placeLikelihood.place.rating,
                                     isFavorite = isFavorite
                                 )
                             )

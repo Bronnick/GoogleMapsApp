@@ -14,7 +14,8 @@ import com.example.googlemapsapp.view_models.FavouritePlacesViewModel
 @Composable
 fun FavouritePlacesScreen(
     viewModel: FavouritePlacesViewModel,
-    onShowOnMapButtonClick: (Place) -> Unit
+    onShowOnMapButtonClick: (Place) -> Unit,
+    onViewDetailsButtonClick: (Place) -> Unit,
 ) {
     val placeList by viewModel.favoritePlaces.collectAsState(initial = emptyList())
 
@@ -25,6 +26,7 @@ fun FavouritePlacesScreen(
             PlaceOverview(
                 place = place,
                 onShowOnMapButtonClick = onShowOnMapButtonClick,
+                onViewDetailsButtonClick = onViewDetailsButtonClick,
                 isFavoriteScreen = false
             )
         }

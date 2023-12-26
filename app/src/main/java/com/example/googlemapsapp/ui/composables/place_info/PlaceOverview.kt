@@ -26,6 +26,7 @@ fun PlaceOverview(
     place: Place,
     onFavoritesIconClick: () -> Unit = {},
     onShowOnMapButtonClick: (Place) -> Unit,
+    onViewDetailsButtonClick: (Place) -> Unit,
     isFavoriteScreen: Boolean
 ) {
     var favoriteState by remember {
@@ -75,7 +76,14 @@ fun PlaceOverview(
                 text = place.placeId,
                 textAlign = TextAlign.End
             )
-
+            Text(
+                text = "Address: ${place.address}",
+                textAlign = TextAlign.End
+            )
+            Text(
+                text = "Rating: ${place.rating}",
+                textAlign = TextAlign.End
+            )
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -104,6 +112,18 @@ fun PlaceOverview(
                         text = "Show on map"
                     )
                 }
+
+
+                Button(
+                    onClick = {
+                        onViewDetailsButtonClick(place)
+                    }
+                ) {
+                    Text(
+                        text = "View details"
+                    )
+                }
+
             }
         }
     }
