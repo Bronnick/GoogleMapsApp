@@ -4,10 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -27,6 +24,7 @@ import com.example.googlemapsapp.classes.Place
 import com.example.googlemapsapp.ui.composables.current_places.CurrentPlacesScreen
 import com.example.googlemapsapp.ui.composables.favorites.FavouritePlacesScreen
 import com.example.googlemapsapp.ui.composables.map.MapScreen
+import com.example.googlemapsapp.ui.composables.place_details.DetailsScreen
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 import com.example.googlemapsapp.view_models.FavouritePlacesViewModel
 import com.example.googlemapsapp.view_models.SettingsViewModel
@@ -50,6 +48,11 @@ sealed class Screen(
         route = "favorite_places",
         icon = Icons.Filled.Favorite,
         resourceId = R.string.favorite_places_bottom_nav
+    )
+    object DetailsScreen : Screen(
+        route = "details?name={name}&photoRef={photoRef}&address={address}&rating={rating}",
+        icon = Icons.Filled.Check,
+        resourceId = R.string.details_bottom_nav
     )
     object Settings : Screen(
         route = "settings",
@@ -120,6 +123,30 @@ fun MainScreen(
             }
         }
 
+        val onViewDetailsButtonClick: (Place) -> Unit = { place ->
+            navController.navigate(
+                Screen.DetailsScreen.route.replace(
+                    oldValue = "{name}",
+                    newValue = place.name
+                ).replace(
+                    oldValue = "{photoRef}",
+                    newValue = place.photoRef ?: ""
+                ).replace(
+                    oldValue = "{address}",
+                    newValue = place.address ?: ""
+                ).replace(
+                    oldValue = "{rating}",
+                    newValue = (place.rating ?: 0.0).toString()
+                )
+            ) {
+                popUpTo(navController.graph.findStartDestination().id){
+                    saveState  = true
+                }
+                launchSingleTop = true
+                //restoreState = true
+            }
+        }
+
         NavHost(
             navController = navController,
             startDestination = Screen.CurrentPlaces.route,
@@ -147,14 +174,42 @@ fun MainScreen(
                 CurrentPlacesScreen(
                     viewModel = currentPlacesViewModel,
                     onShowOnMapButtonClick = onShowOnMapButtonClick,
-                    onViewDetailsButtonClick = {}
+                    onViewDetailsButtonClick = onViewDetailsButtonClick
                 )
             }
             composable(Screen.FavoritePlaces.route) {
                 FavouritePlacesScreen(
                     viewModel = favouritePlacesViewModel,
                     onShowOnMapButtonClick = onShowOnMapButtonClick,
-                    onViewDetailsButtonClick = {}
+                    onViewDetailsButtonClick = onViewDetailsButtonClick
+                )
+            }
+            composable(
+                Screen.DetailsScreen.route,
+                arguments = listOf(
+                    navArgument("name"){
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                    navArgument("photoRef"){
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                    navArgument("address"){
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                    navArgument("rating"){
+                        type = NavType.FloatType
+                        defaultValue = 0.0
+                    }
+                )
+            ) { navBackStackEntry ->
+                DetailsScreen(
+                    name = navBackStackEntry.arguments?.getString("name") ?: "",
+                    photoRef = navBackStackEntry.arguments?.getString("photoRef") ?: "",
+                    address = navBackStackEntry.arguments?.getString("address") ?: "",
+                    rating = (navBackStackEntry.arguments?.getFloat("rating"))?.toDouble() ?: 0.0
                 )
             }
             composable(Screen.Settings.route) {
