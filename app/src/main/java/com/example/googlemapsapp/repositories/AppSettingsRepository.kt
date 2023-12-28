@@ -16,15 +16,15 @@ class AppSettingsRepository @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) {
     suspend fun getParameterByKey(
-        key: Preferences.Key<String>
+        key: Preferences.Key<*>
     ) = dataStore.data.map {preferences ->
-        preferences[key] ?: ""
+        preferences[key]
     }
-        .first{value -> value.isNotEmpty() }
+        .first()
 
-    suspend fun updateSettingText(
-        preferenceKey: Preferences.Key<String>,
-        value: String
+    suspend fun <T> updateSettingText(
+        preferenceKey: Preferences.Key<T>,
+        value: T
     ) {
         dataStore.edit { preferences ->
             preferences[preferenceKey] = value

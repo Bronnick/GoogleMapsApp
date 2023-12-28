@@ -34,7 +34,7 @@ class SettingsViewModel @Inject constructor(
 
     init{
         viewModelScope.launch {
-            settingText = settingsRepository.getParameterByKey(settingTextParam)
+            settingText = settingsRepository.getParameterByKey(settingTextParam) as String
         }
     }
 
@@ -44,7 +44,7 @@ class SettingsViewModel @Inject constructor(
                 settingTextParam,
                 newText
             )
-            settingText = settingsRepository.getParameterByKey(settingTextParam)
+            settingText = settingsRepository.getParameterByKey(settingTextParam) as? String ?: ""
         }
     }
 
