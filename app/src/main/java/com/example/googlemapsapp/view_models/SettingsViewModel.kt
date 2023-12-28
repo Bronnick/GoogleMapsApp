@@ -6,15 +6,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
+import com.example.googlemapsapp.repositories.AppSettingsRepository
+import com.example.googlemapsapp.utils.settingTextParam
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    val savedStateHandle: SavedStateHandle
+    private val settingsRepository: AppSettingsRepository
 ) : ViewModel() {
 
     /*@OptIn(SavedStateHandleSaveableApi::class)
@@ -25,8 +29,27 @@ class SettingsViewModel @Inject constructor(
 
     var settingText by mutableStateOf("Not yet implemented :(")
 
+    var maxCurrentPlacesNumber by mutableStateOf(10)
+        private set
+
+    init{
+        viewModelScope.launch {
+            settingText = settingsRepository.getParameterByKey(settingTextParam)
+        }
+    }
+
     fun updateSettingText(newText: String){
-        settingText = newText
+        viewModelScope.launch {
+            settingsRepository.updateSettingText(
+                settingTextParam,
+                newText
+            )
+            settingText = settingsRepository.getParameterByKey(settingTextParam)
+        }
+    }
+
+    fun updateCurrentPlacesNumber(newValue: Int){
+        maxCurrentPlacesNumber = newValue
     }
 
     companion object{

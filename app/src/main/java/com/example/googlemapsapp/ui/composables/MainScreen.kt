@@ -25,6 +25,7 @@ import com.example.googlemapsapp.ui.composables.current_places.CurrentPlacesScre
 import com.example.googlemapsapp.ui.composables.favorites.FavouritePlacesScreen
 import com.example.googlemapsapp.ui.composables.map.MapScreen
 import com.example.googlemapsapp.ui.composables.place_details.DetailsScreen
+import com.example.googlemapsapp.ui.composables.settings.SettingsScreen
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 import com.example.googlemapsapp.view_models.FavouritePlacesViewModel
 import com.example.googlemapsapp.view_models.SettingsViewModel

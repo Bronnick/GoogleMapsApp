@@ -1,4 +1,4 @@
-package com.example.googlemapsapp.ui.composables
+package com.example.googlemapsapp.ui.composables.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text

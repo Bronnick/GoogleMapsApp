@@ -24,7 +24,7 @@ fun DetailsScreen(
             AsyncImage(
                 model = stringResource(
                     id = R.string.photo_ref,
-                    photoRef ?: ""
+                    photoRef
                 ),
                 contentDescription = null
             )
