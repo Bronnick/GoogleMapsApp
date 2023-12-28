@@ -5,6 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
+import com.example.googlemapsapp.utils.settingTextParam
 import com.example.googlemapsapp.view_models.SettingsViewModel
 
 @Composable
@@ -13,7 +14,7 @@ fun SettingsScreen(
 ){
     Text(
         modifier = Modifier.clickable {
-            viewModel.updateSettingText(viewModel.settingText + "1")
+            viewModel.updateSettings(settingTextParam, viewModel.settingText + "1")
         },
         text=viewModel.settingText
     )

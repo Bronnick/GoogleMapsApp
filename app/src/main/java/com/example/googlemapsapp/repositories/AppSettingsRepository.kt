@@ -22,7 +22,7 @@ class AppSettingsRepository @Inject constructor(
     }
         .first()
 
-    suspend fun <T> updateSettingText(
+    suspend fun <T> updateSettings(
         preferenceKey: Preferences.Key<T>,
         value: T
     ) {

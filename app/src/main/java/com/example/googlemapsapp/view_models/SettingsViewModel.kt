@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,11 +39,11 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun updateSettingText(newText: String){
+    fun <T> updateSettings(key: Preferences.Key<T>, newValue: T){
         viewModelScope.launch {
-            settingsRepository.updateSettingText(
-                settingTextParam,
-                newText
+            settingsRepository.updateSettings(
+                key,
+                newValue
             )
             settingText = settingsRepository.getParameterByKey(settingTextParam) as? String ?: ""
         }
