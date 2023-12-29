@@ -74,7 +74,7 @@ fun MainScreen(
     currentPlacesViewModel: CurrentPlacesViewModel,
     favouritePlacesViewModel: FavouritePlacesViewModel,
     settingsViewModel: SettingsViewModel
-){
+) {
 
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -128,7 +128,7 @@ fun MainScreen(
             navController.navigate(
                 Screen.DetailsScreen.route.replace(
                     oldValue = "{name}",
-                    newValue = place.name
+                    newValue = place.name ?: ""
                 ).replace(
                     oldValue = "{photoRef}",
                     newValue = place.photoRef ?: ""
@@ -207,9 +207,9 @@ fun MainScreen(
                 )
             ) { navBackStackEntry ->
                 DetailsScreen(
-                    name = navBackStackEntry.arguments?.getString("name") ?: "",
-                    photoRef = navBackStackEntry.arguments?.getString("photoRef") ?: "",
-                    address = navBackStackEntry.arguments?.getString("address") ?: "",
+                    name = navBackStackEntry.arguments?.getString("name") ?: " ",
+                    photoRef = navBackStackEntry.arguments?.getString("photoRef") ?: " ",
+                    address = navBackStackEntry.arguments?.getString("address") ?: " ",
                     rating = (navBackStackEntry.arguments?.getFloat("rating"))?.toDouble() ?: 0.0
                 )
             }

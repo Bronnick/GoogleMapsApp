@@ -12,7 +12,7 @@ data class Place (
     @ColumnInfo(name = "id")
     val placeId: String,
 
-    val name: String,
+    val name: String?,
 
     val likelihood: Double,
 

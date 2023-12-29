@@ -12,10 +12,10 @@ import com.example.googlemapsapp.R
 
 @Composable
 fun DetailsScreen(
-    name: String,
-    photoRef: String,
-    address: String,
-    rating: Double
+    name: String?,
+    photoRef: String?,
+    address: String?,
+    rating: Double?
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -24,12 +24,12 @@ fun DetailsScreen(
             AsyncImage(
                 model = stringResource(
                     id = R.string.photo_ref,
-                    photoRef
+                    photoRef ?: ""
                 ),
                 contentDescription = null
             )
             Text(
-               text = name
+               text = "Name: $name"
             )
         }
         Text(
