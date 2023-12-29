@@ -17,7 +17,7 @@ class AppSettingsRepository @Inject constructor(
 ) {
     suspend fun getParameterByKey(
         key: Preferences.Key<*>
-    ) = dataStore.data.map {preferences ->
+    ) = dataStore.data.map { preferences ->
         preferences[key]
     }
         .first()

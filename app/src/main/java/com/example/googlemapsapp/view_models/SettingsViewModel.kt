@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import com.example.googlemapsapp.repositories.AppSettingsRepository
+import com.example.googlemapsapp.utils.maxCurrentPlacesNumberParam
 import com.example.googlemapsapp.utils.settingTextParam
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
@@ -35,7 +36,9 @@ class SettingsViewModel @Inject constructor(
 
     init{
         viewModelScope.launch {
-            settingText = settingsRepository.getParameterByKey(settingTextParam) as String
+            settingText = settingsRepository.getParameterByKey(settingTextParam) as? String ?: ""
+            maxCurrentPlacesNumber = settingsRepository.getParameterByKey(
+                maxCurrentPlacesNumberParam) as? Int ?: 10
         }
     }
 
@@ -45,12 +48,11 @@ class SettingsViewModel @Inject constructor(
                 key,
                 newValue
             )
-            settingText = settingsRepository.getParameterByKey(settingTextParam) as? String ?: ""
+            when(key){
+                settingTextParam -> settingText = newValue as? String ?: ""
+                maxCurrentPlacesNumberParam -> maxCurrentPlacesNumber = newValue as? Int ?: 10
+            }
         }
-    }
-
-    fun updateCurrentPlacesNumber(newValue: Int){
-        maxCurrentPlacesNumber = newValue
     }
 
     companion object{

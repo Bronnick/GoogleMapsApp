@@ -84,23 +84,3 @@ fun MapScreen(
 
 
 }
-
-
-@Composable
-fun GoogleMarkers(){
-    Marker(
-        state = rememberMarkerState(position = LatLng(44.811058, 20.4617586)),
-        title = "Marker1",
-        icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
-    )
-    Marker(
-        state = rememberMarkerState(position = LatLng(44.811058, 20.4627586)),
-        title = "Marker2",
-        icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
-    )
-    Marker(
-        state = rememberMarkerState(position = LatLng(44.810058, 20.4627586)),
-        title = "Marker3",
-        icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)
-    )
-}

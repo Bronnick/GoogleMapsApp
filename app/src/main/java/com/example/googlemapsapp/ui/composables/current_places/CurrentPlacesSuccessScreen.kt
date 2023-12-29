@@ -1,8 +1,11 @@
 package com.example.googlemapsapp.ui.composables.current_places
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -23,19 +26,31 @@ fun CurrentPlacesSuccessScreen(
         initial = emptyList()
     )
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(placeList) { place ->
-            PlaceOverview(
-                place = place,
-                onFavoritesIconClick = {
-                    viewModel.changePlaceFavoriteStatus(place)
-                },
-                onShowOnMapButtonClick = onShowOnMapButtonClick,
-                onViewDetailsButtonClick = onViewDetailsButtonClick,
-                isFavoriteScreen = true
+    Column {
+        Button(
+            onClick = {
+                viewModel.refresh()
+            }
+        ) {
+            Text(
+                text = "Refresh"
             )
+        }
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(placeList) { place ->
+                PlaceOverview(
+                    place = place,
+                    onFavoritesIconClick = {
+                        viewModel.changePlaceFavoriteStatus(place)
+                    },
+                    onShowOnMapButtonClick = onShowOnMapButtonClick,
+                    onViewDetailsButtonClick = onViewDetailsButtonClick,
+                    isFavoriteScreen = true
+                )
+            }
         }
     }
 }

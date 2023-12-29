@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewModelScope
 import com.example.googlemapsapp.classes.Place
+import com.example.googlemapsapp.repositories.AppSettingsRepository
 import com.example.googlemapsapp.repositories.PlacesRepository
-import com.example.googlemapsapp.ui.composables.place_info.photoExample
+import com.example.googlemapsapp.utils.maxCurrentPlacesNumberParam
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.PlaceLikelihood
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,23 +33,34 @@ sealed interface CurrentPlacesUiState{
 
 @HiltViewModel
 class CurrentPlacesViewModel @Inject constructor(
-    private val currentPlacesRepository: PlacesRepository
+    private val currentPlacesRepository: PlacesRepository,
+    private val settingsRepository: AppSettingsRepository
 ) : ViewModel() {
     var currentPlacesUiState: CurrentPlacesUiState by mutableStateOf(CurrentPlacesUiState.Loading)
         private set
 
     val placesList = ArrayList<Place>()
 
+    var maxCurrentPlacesNumber by mutableStateOf(10)
+        private set
+
     var test: String by mutableStateOf("test")
 
     init {
+        refresh()
+    }
+
+    fun refresh() {
         viewModelScope.launch {
+            maxCurrentPlacesNumber = settingsRepository.getParameterByKey(
+                maxCurrentPlacesNumberParam
+            ) as? Int ?: 10
             getCurrentPlaces()
             val favoritePlaces = currentPlacesRepository.getFavoritePlaces()
-            favoritePlaces.collect{
-                for(item in it){
-                    for(el in placesList){
-                        if(el.placeId == item.placeId){
+            favoritePlaces.collect {
+                for (item in it) {
+                    for (el in placesList) {
+                        if (el.placeId == item.placeId) {
                             el.isFavorite = true
                             Log.d("myLogs", "Place: ${item.placeId} ${el.placeId}")
                         }
@@ -60,7 +71,7 @@ class CurrentPlacesViewModel @Inject constructor(
     }
 
     private suspend fun getCurrentPlaces(){
-
+        placesList.clear()
         val placeResponse = currentPlacesRepository.getCurrentPlaces()
         placeResponse.addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -80,31 +91,40 @@ class CurrentPlacesViewModel @Inject constructor(
 
 
                 val placeLikelihoods = response?.placeLikelihoods
+                viewModelScope.launch {
+                    withContext(Dispatchers.IO) {
+                        for (placeLikelihood in placeLikelihoods ?: emptyList()) {
+                            withContext(Dispatchers.IO) {
+                                var isFavorite = false
+                                if (currentPlacesRepository.getPlaceById(placeLikelihood.place.id!!) != null) {
+                                    isFavorite = true
+                                }
 
-                for(placeLikelihood in placeLikelihoods ?: emptyList()){
-                    viewModelScope.launch {
-                        withContext(Dispatchers.IO) {
-                            var isFavorite = false
-                            if (currentPlacesRepository.getPlaceById(placeLikelihood.place.id!!) != null) {
-                                isFavorite = true
+                                if(placesList.size < maxCurrentPlacesNumber) {
+                                    placesList.add(
+                                        Place(
+                                            placeId = placeLikelihood.place.id ?: "",
+                                            name = placeLikelihood.place.name ?: "undefined",
+                                            likelihood = placeLikelihood.likelihood,
+                                            latitude = placeLikelihood.place.latLng?.latitude
+                                                ?: 0.0,
+                                            longitude = placeLikelihood.place.latLng?.longitude
+                                                ?: 0.0,
+                                            photoRef = placeLikelihood.place.photoMetadatas?.get(0)
+                                                ?.zza(),
+                                            address = placeLikelihood.place.address,
+                                            rating = placeLikelihood.place.rating,
+                                            isFavorite = isFavorite
+                                        )
+                                    )
+                                }
                             }
-
-                            placesList.add(
-                                Place(
-                                    placeId = placeLikelihood.place.id ?: "",
-                                    name = placeLikelihood.place.name ?: "undefined",
-                                    likelihood = placeLikelihood.likelihood,
-                                    latitude = placeLikelihood.place.latLng?.latitude ?: 0.0,
-                                    longitude = placeLikelihood.place.latLng?.longitude ?: 0.0,
-                                    photoRef = placeLikelihood.place.photoMetadatas?.get(0)?.zza(),
-                                    address = placeLikelihood.place.address,
-                                    rating = placeLikelihood.place.rating,
-                                    isFavorite = isFavorite
-                                )
-                            )
                         }
                     }
                 }
+
+                Log.d("myLogs", "Max places number: $maxCurrentPlacesNumber")
+
                 val outerList = ArrayList<List<Place>>()
                 outerList.add(placesList)
                 currentPlacesUiState = CurrentPlacesUiState.Success(outerList.asFlow())
