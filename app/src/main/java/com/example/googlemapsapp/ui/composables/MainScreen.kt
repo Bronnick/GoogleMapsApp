@@ -28,6 +28,7 @@ import com.example.googlemapsapp.ui.composables.place_details.DetailsScreen
 import com.example.googlemapsapp.ui.composables.settings.SettingsScreen
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 import com.example.googlemapsapp.view_models.FavouritePlacesViewModel
+import com.example.googlemapsapp.view_models.MapViewModel
 import com.example.googlemapsapp.view_models.SettingsViewModel
 
 sealed class Screen(
@@ -71,6 +72,7 @@ val items = listOf(
 
 @Composable
 fun MainScreen(
+    mapViewModel: MapViewModel,
     currentPlacesViewModel: CurrentPlacesViewModel,
     favouritePlacesViewModel: FavouritePlacesViewModel,
     settingsViewModel: SettingsViewModel
@@ -140,9 +142,9 @@ fun MainScreen(
                     newValue = (place.rating ?: 0.0).toString()
                 )
             ) {
-                popUpTo(navController.graph.findStartDestination().id){
+                /*popUpTo(navController.graph.findStartDestination().id){
                     saveState  = true
-                }
+                }*/
                 launchSingleTop = true
                 //restoreState = true
             }
@@ -167,6 +169,7 @@ fun MainScreen(
                 )
             ) { navBackStackEntry ->
                 MapScreen(
+                    viewModel = mapViewModel,
                     latitude = navBackStackEntry.arguments?.getFloat("lat")!!,
                     longitude = navBackStackEntry.arguments?.getFloat("lng")!!
                 )

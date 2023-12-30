@@ -7,9 +7,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.googlemapsapp.view_models.MapViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionsRequired
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -22,9 +24,12 @@ import com.google.maps.android.compose.*
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MapScreen(
+    viewModel: MapViewModel,
     latitude: Float,
     longitude: Float
 ) {
+    val displayedPlaces = viewModel.favoritePlaces.collectAsState(initial = emptyList()).value
+
     val multiplePermissionState = rememberMultiplePermissionsState(
         permissions = listOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -44,16 +49,8 @@ fun MapScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
-            .padding(16.dp)
+            .padding(8.dp)
     ) {
-        Text(
-            text = "Welcome to the MapsApp!",
-            style = MaterialTheme.typography.h5,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-
         PermissionsRequired(
             multiplePermissionsState = multiplePermissionState,
             permissionsNotGrantedContent = { /* ... */ },
@@ -62,13 +59,22 @@ fun MapScreen(
             GoogleMap(
                 cameraPositionState = cameraPositionState,
                 modifier = Modifier.weight(1f),
-                properties = MapProperties(isMyLocationEnabled = true),
-                uiSettings = MapUiSettings(compassEnabled = true)
-            ) {
-                PlaceMarker(
-                    latitude = latitude.toDouble(),
-                    longitude = longitude.toDouble(),
+                properties = MapProperties(
+                    isMyLocationEnabled = true,
+                    isBuildingEnabled = true
+                ),
+                uiSettings = MapUiSettings(
+                    compassEnabled = true,
+                    myLocationButtonEnabled = true
                 )
+            ) {
+                displayedPlaces.map { place ->
+                    PlaceMarker(
+                        place = place,
+                        latitude = place.latitude,
+                        longitude = place.longitude,
+                    )
+                }
                 Polyline(
                     points = listOf(
                         LatLng(44.811058, 20.4617586),
