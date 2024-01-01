@@ -21,6 +21,7 @@ fun FavouritePlacesScreen(
     viewModel: FavouritePlacesViewModel,
     onShowOnMapButtonClick: (Place) -> Unit,
     onViewDetailsButtonClick: (Place) -> Unit,
+    onDeleteFavoritePlace: (Place) -> Unit
 ) {
     val placeList by viewModel.favoritePlaces.collectAsState(initial = emptyList())
 
@@ -34,7 +35,7 @@ fun FavouritePlacesScreen(
                     initialValue = DismissValue.Default,
                     confirmStateChange = {
                         if(it == DismissValue.DismissedToEnd || it == DismissValue.DismissedToStart){
-                            viewModel.deletePlace(place)
+                            onDeleteFavoritePlace(place)
                         }
                         false
                     }

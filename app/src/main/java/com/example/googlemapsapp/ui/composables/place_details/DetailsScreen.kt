@@ -37,7 +37,7 @@ fun DetailsScreen(
                         ),
                         contentDescription = null
                     )
-                } else{
+                } else {
                     Image(
                         modifier = Modifier.size(150.dp),
                         painter = BitmapPainter(ImageBitmap.imageResource(id = R.drawable.image_not_found)),

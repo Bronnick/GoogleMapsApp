@@ -185,7 +185,11 @@ fun MainScreen(
                 FavouritePlacesScreen(
                     viewModel = favouritePlacesViewModel,
                     onShowOnMapButtonClick = onShowOnMapButtonClick,
-                    onViewDetailsButtonClick = onViewDetailsButtonClick
+                    onViewDetailsButtonClick = onViewDetailsButtonClick,
+                    onDeleteFavoritePlace = { place ->
+                        favouritePlacesViewModel.deletePlace(place)
+                        currentPlacesViewModel.refreshList()
+                    }
                 )
             }
             composable(
