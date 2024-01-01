@@ -1,7 +1,10 @@
 package com.example.googlemapsapp.ui.composables.settings
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -19,7 +22,7 @@ import androidx.compose.runtime.*
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel
-){
+) {
     var maxCurrentPlacesNumber by remember {
         mutableStateOf(viewModel.maxCurrentPlacesNumber.toString())
     }
@@ -32,22 +35,42 @@ fun SettingsScreen(
             text = viewModel.settingText
         )
 
-        Text(
-            text = "Maximum current places amount"
-        )
-
-        TextField(
-            value = maxCurrentPlacesNumber,
-            textStyle = TextStyle(fontSize = 15.sp),
+        MaxCurrentPlacesSetting(
+            maxCurrentPlacesNumber = maxCurrentPlacesNumber,
             onValueChange = {
                 maxCurrentPlacesNumber = try {
                     viewModel.updateSettings(maxCurrentPlacesNumberParam, it.toInt())
                     it
                 } catch(e: NumberFormatException) {
-                    // TODO
                     it
                 }
             }
         )
+        MapTypeSetting()
     }
+}
+
+@Composable
+fun MaxCurrentPlacesSetting(
+    maxCurrentPlacesNumber: String,
+    onValueChange: (String) -> Unit
+) {
+    Row {
+        Text(
+            text = "Max current places: "
+        )
+        OutlinedTextField(
+            value = maxCurrentPlacesNumber,
+            textStyle = TextStyle(fontSize = 15.sp),
+            onValueChange = onValueChange
+        )
+    }
+}
+
+@Composable
+fun MapTypeSetting() {
+    Text(
+        text = "Map type: "
+    )
+
 }

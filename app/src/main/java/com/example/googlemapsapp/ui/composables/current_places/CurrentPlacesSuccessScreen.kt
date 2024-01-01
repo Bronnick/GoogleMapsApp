@@ -33,6 +33,16 @@ fun CurrentPlacesSuccessScreen(
             }
         ) {
             Text(
+                text = "Refresh all"
+            )
+        }
+
+        Button(
+            onClick = {
+                viewModel.refreshList()
+            }
+        ) {
+            Text(
                 text = "Refresh"
             )
         }

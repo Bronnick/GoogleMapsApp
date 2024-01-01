@@ -36,6 +36,9 @@ class CurrentPlacesViewModel @Inject constructor(
     private val currentPlacesRepository: PlacesRepository,
     private val settingsRepository: AppSettingsRepository
 ) : ViewModel() {
+    val favoritePlaces: Flow<List<Place>> =
+        currentPlacesRepository.getFavoritePlaces()
+
     var currentPlacesUiState: CurrentPlacesUiState by mutableStateOf(CurrentPlacesUiState.Loading)
         private set
 
@@ -48,6 +51,21 @@ class CurrentPlacesViewModel @Inject constructor(
 
     init {
         refresh()
+    }
+
+    fun refreshList() {
+        val copiedList = ArrayList<Place>()
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                placesList.forEach { place ->
+                    place.isFavorite = currentPlacesRepository.getPlaceById(place.placeId) != null
+                }
+
+                val outerList = ArrayList<List<Place>>()
+                outerList.add(placesList)
+                currentPlacesUiState = CurrentPlacesUiState.Success(outerList.asFlow())
+            }
+        }
     }
 
     fun refresh() {

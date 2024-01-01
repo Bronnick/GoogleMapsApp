@@ -48,12 +48,14 @@ class SettingsViewModel @Inject constructor(
                 key,
                 newValue
             )
-            when(key){
+            when(key) {
                 settingTextParam -> settingText = newValue as? String ?: ""
                 maxCurrentPlacesNumberParam -> maxCurrentPlacesNumber = newValue as? Int ?: 10
             }
         }
     }
+
+
 
     companion object{
         const val SETTINGS_TEXT_KEY = "settings_text_key"
