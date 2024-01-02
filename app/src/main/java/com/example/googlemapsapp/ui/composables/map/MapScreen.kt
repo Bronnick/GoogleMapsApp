@@ -81,6 +81,8 @@ fun MapScreen(
                         place = place,
                         latitude = place.latitude,
                         longitude = place.longitude,
+                        isColorDiffer = place.latitude.toFloat() == latitude &&
+                                place.longitude.toFloat() == longitude
                     )
                 }
                 Polyline(
