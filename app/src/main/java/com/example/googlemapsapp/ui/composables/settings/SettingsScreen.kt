@@ -1,31 +1,37 @@
 package com.example.googlemapsapp.ui.composables.settings
 
-import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
 import com.example.googlemapsapp.utils.maxCurrentPlacesNumberParam
 import com.example.googlemapsapp.utils.settingTextParam
 import com.example.googlemapsapp.view_models.SettingsViewModel
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
+import com.example.googlemapsapp.utils.mapTypeParam
+import com.google.maps.android.compose.MapType
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel
+    viewModel: SettingsViewModel,
+    onMapTypeChanged: (String) -> Unit
 ) {
     var maxCurrentPlacesNumber by remember {
         mutableStateOf(viewModel.maxCurrentPlacesNumber.toString())
     }
+
+    val showMapTypeDropdownMenu = viewModel.showMapTypeDropdownMenu.observeAsState().value
+    val selectedDropdownMenuValue = viewModel.selectedMapTypeValue.observeAsState().value
 
     Column {
         Text(
@@ -46,7 +52,17 @@ fun SettingsScreen(
                 }
             }
         )
-        MapTypeSetting()
+        MapTypeSetting(
+            expanded = showMapTypeDropdownMenu ?: false,
+            selectedValue = selectedDropdownMenuValue ?: "Normal",
+            onDropdownMenuExpand = {
+                viewModel.setMapTypeDropdownMenuVisibility(true)
+            },
+            onDropdownMenuDismiss = {
+                viewModel.setMapTypeDropdownMenuVisibility(false)
+            },
+            onDropdownMenuItemSelect = onMapTypeChanged
+        )
     }
 }
 
@@ -55,7 +71,10 @@ fun MaxCurrentPlacesSetting(
     maxCurrentPlacesNumber: String,
     onValueChange: (String) -> Unit
 ) {
-    Row {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
             text = "Max current places: "
         )
@@ -68,9 +87,55 @@ fun MaxCurrentPlacesSetting(
 }
 
 @Composable
-fun MapTypeSetting() {
-    Text(
-        text = "Map type: "
-    )
+fun MapTypeSetting(
+    expanded: Boolean,
+    selectedValue: String,
+    onDropdownMenuExpand: () -> Unit,
+    onDropdownMenuDismiss: () -> Unit,
+    onDropdownMenuItemSelect: (String) -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth()
+            .padding(start = 8.dp, end = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Map type: "
+        )
+        Box {
+            IconButton(onClick = onDropdownMenuExpand) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(selectedValue)
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = null
+                    )
+                }
+            }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = onDropdownMenuDismiss,
+            ) {
+                DropdownMenuItem(
+                    onClick = {
+                        onDropdownMenuItemSelect("Normal")
+                    },
+                ) {
+                    Text("Normal")
+                }
+                DropdownMenuItem(
+                    onClick = {
+                        onDropdownMenuItemSelect("Hybrid")
+                    }
+                ) {
+                    Text("Hybrid")
+                }
+            }
+        }
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.example.googlemapsapp.utils
 
 import android.content.Context
+import androidx.compose.runtime.currentRecomposeScope
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -11,3 +12,4 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 
 val settingTextParam = stringPreferencesKey("setting_text")
 val maxCurrentPlacesNumberParam = intPreferencesKey("max_current_places")
+val mapTypeParam = stringPreferencesKey("map_type_setting")

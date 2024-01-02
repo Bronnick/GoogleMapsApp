@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,7 @@ fun MapScreen(
     latitude: Float,
     longitude: Float
 ) {
+    val mapType = viewModel.mapType.observeAsState().value
     val displayedPlaces = viewModel.favoritePlaces.collectAsState(initial = emptyList()).value
 
     val multiplePermissionState = rememberMultiplePermissionsState(
@@ -60,6 +62,7 @@ fun MapScreen(
                 cameraPositionState = cameraPositionState,
                 modifier = Modifier.weight(1f),
                 properties = MapProperties(
+                    mapType = mapType ?: MapType.NORMAL,
                     isMyLocationEnabled = true,
                     isBuildingEnabled = true
                 ),
