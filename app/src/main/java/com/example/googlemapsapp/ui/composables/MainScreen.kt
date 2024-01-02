@@ -195,7 +195,7 @@ fun MainScreen(
                 )
             }
             composable(
-                Screen.DetailsScreen.route,
+                route = Screen.DetailsScreen.route,
                 arguments = listOf(
                     navArgument("name"){
                         type = NavType.StringType
@@ -213,7 +213,8 @@ fun MainScreen(
                         type = NavType.FloatType
                         defaultValue = 0.0
                     }
-                )
+                ),
+
             ) { navBackStackEntry ->
                 DetailsScreen(
                     name = navBackStackEntry.arguments?.getString("name") ?: " ",

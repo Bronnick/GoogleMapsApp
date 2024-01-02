@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,98 +35,78 @@ fun PlaceOverview(
         mutableStateOf(place.isFavorite)
     }
 
-    Box(
+    OutlinedCard(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colors.surface
+        ),
         modifier = Modifier
             .fillMaxWidth()
-    ){
-        Column(
-            modifier = Modifier
-                .padding(all = 8.dp)
-                .fillMaxWidth()
+            .padding(all = 8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .padding(start = 16.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
 
-                AsyncImage(
-                    /*model = place.photos[0].attributions.substringAfter('"')
-                        .substringBefore('"'),*/
-                    modifier = Modifier.size(150.dp),
-                    model = stringResource(
-                        id = R.string.photo_ref,
-                        place.photoRef ?: ""
-                    ),
-                    contentDescription = null
+            AsyncImage(
+                /*model = place.photos[0].attributions.substringAfter('"')
+                    .substringBefore('"'),*/
+                modifier = Modifier.size(150.dp),
+                model = stringResource(
+                    id = R.string.photo_ref,
+                    place.photoRef ?: ""
+                ),
+                contentDescription = null
+            )
+
+            Text(
+                modifier = Modifier.padding(start = 8.dp, top = 16.dp),
+                text = place.name ?: "",
+                textAlign = TextAlign.End,
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .padding(all = 8.dp)
+        ) {
+            if(isFavoriteScreen) {
+                IconButton(
+                    onClick = {
+                        favoriteState = !favoriteState
+                        onFavoritesIconClick()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Favorite /*if(place.isFavorite) Icons.Default.Favorite
+                                else Icons.Filled.Favorite*/,
+                        tint = if (favoriteState) Color.Red else Color.Unspecified,
+                        contentDescription = null
+                    )
+                }
+            }
+
+            Button(
+                onClick = {
+                    onShowOnMapButtonClick(place)
+                }
+            ) {
+                Text(
+                    text = "Show on map"
                 )
-
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        modifier = Modifier.padding(start = 8.dp, top = 16.dp),
-                        text = place.isFavorite.toString(),
-                        textAlign = TextAlign.End,
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 8.dp, top = 16.dp),
-                        text = "${place.latitude}, ${place.longitude}",
-                        textAlign = TextAlign.End,
-                    )
-                }
             }
-            Text(
-                text = place.placeId,
-                textAlign = TextAlign.End
-            )
-            Text(
-                text = "Address: ${place.address}",
-                textAlign = TextAlign.End
-            )
-            Text(
-                text = "Rating: ${place.rating}",
-                textAlign = TextAlign.End
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth()
+
+            Spacer(Modifier.size(16.dp))
+
+            Button(
+                onClick = {
+                    onViewDetailsButtonClick(place)
+                }
             ) {
-                if(isFavoriteScreen) {
-                    IconButton(
-                        onClick = {
-                            favoriteState = !favoriteState
-                            onFavoritesIconClick()
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Favorite /*if(place.isFavorite) Icons.Default.Favorite
-                                    else Icons.Filled.Favorite*/,
-                            tint = if (favoriteState) Color.Red else Color.Unspecified,
-                            contentDescription = null
-                        )
-                    }
-                }
-
-                Button(
-                    onClick = {
-                        onShowOnMapButtonClick(place)
-                    }
-                ) {
-                    Text(
-                        text = "Show on map"
-                    )
-                }
-
-
-                Button(
-                    onClick = {
-                        onViewDetailsButtonClick(place)
-                    }
-                ) {
-                    Text(
-                        text = "View details"
-                    )
-                }
-
+                Text(
+                    text = "View details"
+                )
             }
+
         }
     }
 }
