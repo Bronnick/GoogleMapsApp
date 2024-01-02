@@ -17,6 +17,10 @@ import com.example.googlemapsapp.view_models.SettingsViewModel
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.unit.dp
 import com.example.googlemapsapp.utils.mapTypeParam
 import com.google.maps.android.compose.MapType
@@ -24,7 +28,8 @@ import com.google.maps.android.compose.MapType
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
-    onMapTypeChanged: (String) -> Unit
+    onMapTypeChanged: (String) -> Unit,
+    onTrafficChange: (Boolean) -> Unit
 ) {
     var maxCurrentPlacesNumber by remember {
         mutableStateOf(viewModel.maxCurrentPlacesNumber.toString())
@@ -32,6 +37,7 @@ fun SettingsScreen(
 
     val showMapTypeDropdownMenu = viewModel.showMapTypeDropdownMenu.observeAsState().value
     val selectedDropdownMenuValue = viewModel.selectedMapTypeValue.observeAsState().value
+    val isTrafficEnabled = viewModel.isTrafficEnabled.observeAsState().value
 
     Column {
         Text(
@@ -63,6 +69,10 @@ fun SettingsScreen(
             },
             onDropdownMenuItemSelect = onMapTypeChanged
         )
+        TrafficSetting(
+            isTrafficEnabled = isTrafficEnabled!!,
+            onTrafficChange = onTrafficChange
+        )
     }
 }
 
@@ -72,7 +82,20 @@ fun MaxCurrentPlacesSetting(
     onValueChange: (String) -> Unit
 ) {
     Row(
-        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .drawBehind {
+                val borderSize = 1.dp
+                drawLine(
+                    color = Color.White,
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = borderSize.toPx(),
+                    pathEffect = PathEffect.cornerPathEffect(5.0f)
+                )
+            }
+            .padding(top = 8.dp, bottom = 8.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -95,9 +118,20 @@ fun MapTypeSetting(
     onDropdownMenuItemSelect: (String) -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, bottom = 8.dp)
+            .drawBehind {
+                val borderSize = 1.dp
+                drawLine(
+                    color = Color.White,
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = borderSize.toPx(),
+                    pathEffect = PathEffect.cornerPathEffect(5.0f)
+                )
+            },
+        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -106,7 +140,6 @@ fun MapTypeSetting(
         Box {
             IconButton(onClick = onDropdownMenuExpand) {
                 Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(selectedValue)
@@ -134,8 +167,43 @@ fun MapTypeSetting(
                 ) {
                     Text("Hybrid")
                 }
+                DropdownMenuItem(
+                    onClick = {
+                        onDropdownMenuItemSelect("Terrain")
+                    }
+                ) {
+                    Text("Terrain")
+                }
             }
         }
     }
+}
 
+@Composable
+fun TrafficSetting(
+    isTrafficEnabled: Boolean,
+    onTrafficChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth()
+            .padding(start = 4.dp, end = 4.dp, top = 8.dp, bottom = 8.dp)
+            .drawBehind {
+                val borderSize = 1.dp
+                drawLine(
+                    color = Color.White,
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = borderSize.toPx(),
+                    pathEffect = PathEffect.cornerPathEffect(5.0f)
+                )
+            },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        Text("Enable traffic")
+        Switch(
+            checked = isTrafficEnabled,
+            onCheckedChange = onTrafficChange
+        )
+    }
 }

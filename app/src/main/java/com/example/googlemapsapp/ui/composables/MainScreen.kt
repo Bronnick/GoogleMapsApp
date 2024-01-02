@@ -27,6 +27,7 @@ import com.example.googlemapsapp.ui.composables.map.MapScreen
 import com.example.googlemapsapp.ui.composables.place_details.DetailsScreen
 import com.example.googlemapsapp.ui.composables.settings.SettingsScreen
 import com.example.googlemapsapp.utils.mapTypeParam
+import com.example.googlemapsapp.utils.trafficParam
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 import com.example.googlemapsapp.view_models.FavouritePlacesViewModel
 import com.example.googlemapsapp.view_models.MapViewModel
@@ -227,7 +228,12 @@ fun MainScreen(
                     onMapTypeChanged = { mapType ->
                         settingsViewModel.updateSettings(mapTypeParam, mapType)
                         settingsViewModel.setMapTypeDropdownMenuVisibility(false)
-                        mapViewModel.getMapType(mapType)
+                        mapViewModel.setMapType(mapType)
+                    },
+                    onTrafficChange = { isTrafficEnabled ->
+                        settingsViewModel.updateSettings(trafficParam, isTrafficEnabled)
+                        settingsViewModel.setTraffic(isTrafficEnabled)
+                        mapViewModel.setTraffic(isTrafficEnabled)
                     }
                 )
             }

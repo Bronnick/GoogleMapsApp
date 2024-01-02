@@ -11,6 +11,7 @@ import com.example.googlemapsapp.repositories.AppSettingsRepository
 import com.example.googlemapsapp.utils.mapTypeParam
 import com.example.googlemapsapp.utils.maxCurrentPlacesNumberParam
 import com.example.googlemapsapp.utils.settingTextParam
+import com.example.googlemapsapp.utils.trafficParam
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,18 +40,28 @@ class SettingsViewModel @Inject constructor(
         val selectedMapTypeValue
             get() = _selectedMapTypeValue
 
+    private val _isTrafficEnabled = MutableLiveData(false)
+    val isTrafficEnabled
+        get() = _isTrafficEnabled
+
     init{
         viewModelScope.launch {
             settingText = settingsRepository.getParameterByKey(settingTextParam) as? String ?: ""
             maxCurrentPlacesNumber = settingsRepository.getParameterByKey(
                 maxCurrentPlacesNumberParam) as? Int ?: 10
-            selectedMapTypeValue.value = settingsRepository.getParameterByKey(mapTypeParam)
+            _selectedMapTypeValue.value = settingsRepository.getParameterByKey(mapTypeParam)
                     as? String ?: "Normal"
+            _isTrafficEnabled.value = settingsRepository.getParameterByKey(trafficParam) as? Boolean
+                ?: false
         }
     }
 
     fun setMapTypeDropdownMenuVisibility(value: Boolean) {
         _showMapTypeDropdownMenu.value = value
+    }
+
+    fun setTraffic(value: Boolean) {
+        _isTrafficEnabled.value = value
     }
 
     fun <T> updateSettings(key: Preferences.Key<T>, newValue: T) {
@@ -66,8 +77,6 @@ class SettingsViewModel @Inject constructor(
             )
         }
     }
-
-
 
     companion object{
         const val SETTINGS_TEXT_KEY = "settings_text_key"

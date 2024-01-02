@@ -19,6 +19,8 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.PointOfInterest
 import com.google.maps.android.compose.*
 
 
@@ -30,6 +32,8 @@ fun MapScreen(
     longitude: Float
 ) {
     val mapType = viewModel.mapType.observeAsState().value
+    val isTrafficEnabled = viewModel.isTrafficEnabled.observeAsState().value
+
     val displayedPlaces = viewModel.favoritePlaces.collectAsState(initial = emptyList()).value
 
     val multiplePermissionState = rememberMultiplePermissionsState(
@@ -64,14 +68,15 @@ fun MapScreen(
                 properties = MapProperties(
                     mapType = mapType ?: MapType.NORMAL,
                     isMyLocationEnabled = true,
-                    isBuildingEnabled = true
+                    isBuildingEnabled = true,
+                    isTrafficEnabled = isTrafficEnabled ?: false
                 ),
                 uiSettings = MapUiSettings(
                     compassEnabled = true,
                     myLocationButtonEnabled = true
                 )
             ) {
-                displayedPlaces.map { place ->
+                displayedPlaces.forEach { place ->
                     PlaceMarker(
                         place = place,
                         latitude = place.latitude,

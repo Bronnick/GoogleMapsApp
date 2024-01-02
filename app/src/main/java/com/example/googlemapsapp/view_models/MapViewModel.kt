@@ -7,6 +7,7 @@ import com.example.googlemapsapp.classes.Place
 import com.example.googlemapsapp.repositories.AppSettingsRepository
 import com.example.googlemapsapp.repositories.PlacesRepository
 import com.example.googlemapsapp.utils.mapTypeParam
+import com.example.googlemapsapp.utils.trafficParam
 import com.google.maps.android.compose.MapType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -25,22 +26,27 @@ class MapViewModel @Inject constructor(
     val mapType
         get() = _mapType
 
-    init{
+    private val _isTrafficEnabled = MutableLiveData(false)
+    val isTrafficEnabled
+        get() = _isTrafficEnabled
+
+    init {
         viewModelScope.launch {
-            _mapType.value =
-                when (appSettingsRepository.getParameterByKey(mapTypeParam) as? String ?: "Normal") {
-                    "Normal" -> MapType.NORMAL
-                    "Hybrid" -> MapType.HYBRID
-                    else -> MapType.NORMAL
-                }
+            setMapType(appSettingsRepository.getParameterByKey(mapTypeParam) as? String ?: "Normal")
+            setTraffic(appSettingsRepository.getParameterByKey(trafficParam) as? Boolean ?: false)
         }
     }
 
-    fun getMapType(value: String) {
+    fun setMapType(value: String) {
         _mapType.value = when(value) {
             "Normal" -> MapType.NORMAL
             "Hybrid" -> MapType.HYBRID
+            "Terrain" -> MapType.TERRAIN
             else -> MapType.NORMAL
         }
+    }
+
+    fun setTraffic(value: Boolean) {
+        _isTrafficEnabled.value = value
     }
 }
