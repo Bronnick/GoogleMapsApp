@@ -92,8 +92,8 @@ fun MainScreen(
 
     Scaffold(
         modifier = Modifier
-            .background(color = MaterialTheme.colorScheme.background)
             .fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.surface,
         bottomBar = {
             NavigationBar() {
                 items.forEach{screen ->

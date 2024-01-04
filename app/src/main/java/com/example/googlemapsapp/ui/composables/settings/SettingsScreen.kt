@@ -138,11 +138,17 @@ fun MapTypeSetting(
             text = "Map type: "
         )
         Box {
-            IconButton(onClick = onDropdownMenuExpand) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = selectedValue,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                IconButton(
+                    modifier = Modifier.widthIn(max = 25.dp),
+                    onClick = onDropdownMenuExpand
                 ) {
-                    Text(selectedValue)
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = null

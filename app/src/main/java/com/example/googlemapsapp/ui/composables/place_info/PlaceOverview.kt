@@ -1,6 +1,8 @@
 package com.example.googlemapsapp.ui.composables.place_info
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -19,6 +21,10 @@ import com.example.googlemapsapp.R
 import com.example.googlemapsapp.classes.Place
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.res.imageResource
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 
 val photoExample = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWU5eFhOeU-PGDK97Lec9K0e3GYZ2HsBl_u8V_w2xa-SUqyP9O-Urlzr53U_VP91seElwit7c_KYZM9mAgtDlsO-qXB7ec6IRgPzOrz38mgypMHi23RVqImcI_3d4HitUWSkYINMNaBDUivYzY93xr2m3ky96s8K2WkWkcZeBGiAiXO1C8kw&key=AIzaSyBlrwhE1xSDXu-sH-BCHpxRNLZy8iFKlek"
@@ -37,7 +43,7 @@ fun PlaceOverview(
 
     OutlinedCard(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -49,21 +55,34 @@ fun PlaceOverview(
                 .padding(start = 16.dp)
         ) {
 
-            AsyncImage(
-                /*model = place.photos[0].attributions.substringAfter('"')
+            if(place.photoRef?.trim()?.isNotEmpty() == true) {
+                AsyncImage(
+                    /*model = place.photos[0].attributions.substringAfter('"')
                     .substringBefore('"'),*/
-                modifier = Modifier.size(150.dp),
-                model = stringResource(
-                    id = R.string.photo_ref,
-                    place.photoRef ?: ""
-                ),
-                contentDescription = null
-            )
+                    modifier = Modifier.padding(top = 16.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    model = stringResource(
+                        id = R.string.photo_ref,
+                        place.photoRef ?: ""
+                    ),
+                    contentDescription = null
+                )
+            } else {
+                Image(
+                    modifier = Modifier.padding(top = 16.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .size(150.dp),
+                    painter = BitmapPainter(ImageBitmap.imageResource(id = R.drawable.image_not_found)),
+                    contentDescription = null
+                )
+            }
 
             Text(
-                modifier = Modifier.padding(start = 8.dp, top = 16.dp),
+                modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 16.dp),
                 text = place.name ?: "",
-                textAlign = TextAlign.End,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
         Row(
@@ -101,7 +120,7 @@ fun PlaceOverview(
 
             Button(
                 colors = ButtonDefaults.buttonColors(
-
+                    containerColor = MaterialTheme.colorScheme.onSecondaryContainer
                 ),
                 onClick = {
                     onViewDetailsButtonClick(place)
