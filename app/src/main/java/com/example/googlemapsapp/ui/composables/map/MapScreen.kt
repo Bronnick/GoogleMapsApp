@@ -3,8 +3,8 @@ package com.example.googlemapsapp.ui.composables.map
 import android.Manifest
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -54,7 +54,7 @@ fun MapScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colorScheme.background)
             .padding(8.dp)
     ) {
         PermissionsRequired(
@@ -85,18 +85,7 @@ fun MapScreen(
                                 place.longitude.toFloat() == longitude
                     )
                 }
-                Polyline(
-                    points = listOf(
-                        LatLng(44.811058, 20.4617586),
-                        LatLng(44.811058, 20.4627586),
-                        LatLng(44.810058, 20.4627586),
-                        LatLng(44.809058, 20.4627586),
-                        LatLng(44.809058, 20.4617586)
-                    )
-                )
             }
         }
     }
-
-
 }

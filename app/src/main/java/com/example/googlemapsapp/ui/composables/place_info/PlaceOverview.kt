@@ -1,7 +1,7 @@
 package com.example.googlemapsapp.ui.composables.place_info
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.CardDefaults
@@ -37,14 +37,15 @@ fun PlaceOverview(
 
     OutlinedCard(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colors.surface
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(all = 8.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(start = 16.dp)
         ) {
 
@@ -66,7 +67,8 @@ fun PlaceOverview(
             )
         }
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(all = 8.dp)
         ) {
             if(isFavoriteScreen) {
@@ -98,6 +100,9 @@ fun PlaceOverview(
             Spacer(Modifier.size(16.dp))
 
             Button(
+                colors = ButtonDefaults.buttonColors(
+
+                ),
                 onClick = {
                     onViewDetailsButtonClick(place)
                 }

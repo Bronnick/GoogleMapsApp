@@ -2,9 +2,9 @@ package com.example.googlemapsapp.ui.composables.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -154,26 +154,29 @@ fun MapTypeSetting(
                 onDismissRequest = onDropdownMenuDismiss,
             ) {
                 DropdownMenuItem(
+                    text = {
+                        Text("Normal")
+                    },
                     onClick = {
                         onDropdownMenuItemSelect("Normal")
                     },
-                ) {
-                    Text("Normal")
-                }
+                )
                 DropdownMenuItem(
+                    text = {
+                        Text("Hybrid")
+                    },
                     onClick = {
                         onDropdownMenuItemSelect("Hybrid")
                     }
-                ) {
-                    Text("Hybrid")
-                }
+                )
                 DropdownMenuItem(
+                    text = {
+                        Text("Terrain")
+                    },
                     onClick = {
                         onDropdownMenuItemSelect("Terrain")
                     }
-                ) {
-                    Text("Terrain")
-                }
+                )
             }
         }
     }

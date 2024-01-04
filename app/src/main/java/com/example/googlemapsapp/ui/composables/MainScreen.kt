@@ -1,8 +1,12 @@
 package com.example.googlemapsapp.ui.composables
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
@@ -84,15 +88,16 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
     Scaffold(
+        modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.background)
+            .fillMaxSize(),
         bottomBar = {
-            BottomNavigation {
-
+            NavigationBar() {
                 items.forEach{screen ->
-                    BottomNavigationItem(
+                    NavigationBarItem(
                         icon = {Icon(screen.icon, contentDescription = null)},
                         label = {Text(text = stringResource(screen.resourceId))},
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
@@ -130,7 +135,7 @@ fun MainScreen(
 
         val onViewDetailsButtonClick: (Place) -> Unit = { place ->
             navController.navigate(
-                Screen.DetailsScreen.route.replace(
+                route = Screen.DetailsScreen.route.replace(
                     oldValue = "{name}",
                     newValue = place.name ?: ""
                 ).replace(
@@ -142,8 +147,10 @@ fun MainScreen(
                 ).replace(
                     oldValue = "{rating}",
                     newValue = (place.rating ?: 0.0).toString()
-                )
+                ),
+
             ) {
+
                 /*popUpTo(navController.graph.findStartDestination().id){
                     saveState  = true
                 }*/
@@ -158,7 +165,7 @@ fun MainScreen(
             modifier = Modifier.padding(it)
         ) {
             composable(
-                Screen.Map.route,
+                route = Screen.Map.route,
                 arguments = listOf(
                     navArgument("lat"){
                         type = NavType.FloatType
@@ -168,7 +175,13 @@ fun MainScreen(
                         type = NavType.FloatType
                         defaultValue = 20.4617586
                     }
-                )
+                ),
+                enterTransition = {
+                    EnterTransition.None
+                },
+                exitTransition = {
+                    ExitTransition.None
+                }
             ) { navBackStackEntry ->
                 MapScreen(
                     viewModel = mapViewModel,
@@ -176,14 +189,30 @@ fun MainScreen(
                     longitude = navBackStackEntry.arguments?.getFloat("lng")!!
                 )
             }
-            composable(Screen.CurrentPlaces.route) {
+            composable(
+                route = Screen.CurrentPlaces.route,
+                enterTransition = {
+                    EnterTransition.None
+                },
+                exitTransition = {
+                    ExitTransition.None
+                }
+            ) {
                 CurrentPlacesScreen(
                     viewModel = currentPlacesViewModel,
                     onShowOnMapButtonClick = onShowOnMapButtonClick,
                     onViewDetailsButtonClick = onViewDetailsButtonClick
                 )
             }
-            composable(Screen.FavoritePlaces.route) {
+            composable(
+                route = Screen.FavoritePlaces.route,
+                enterTransition = {
+                    EnterTransition.None
+                },
+                exitTransition = {
+                    ExitTransition.None
+                }
+            ) {
                 FavouritePlacesScreen(
                     viewModel = favouritePlacesViewModel,
                     onShowOnMapButtonClick = onShowOnMapButtonClick,
@@ -214,7 +243,12 @@ fun MainScreen(
                         defaultValue = 0.0
                     }
                 ),
-
+                enterTransition = {
+                    EnterTransition.None
+                },
+                exitTransition = {
+                    ExitTransition.None
+                }
             ) { navBackStackEntry ->
                 DetailsScreen(
                     name = navBackStackEntry.arguments?.getString("name") ?: " ",
@@ -223,7 +257,15 @@ fun MainScreen(
                     rating = (navBackStackEntry.arguments?.getFloat("rating"))?.toDouble() ?: 0.0
                 )
             }
-            composable(Screen.Settings.route) {
+            composable(
+                route = Screen.Settings.route,
+                enterTransition = {
+                    EnterTransition.None
+                },
+                exitTransition = {
+                    ExitTransition.None
+                }
+            ) {
                 SettingsScreen(
                     viewModel = settingsViewModel,
                     onMapTypeChanged = { mapType ->
