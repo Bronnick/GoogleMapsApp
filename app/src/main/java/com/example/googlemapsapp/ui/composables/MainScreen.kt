@@ -4,19 +4,20 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -32,13 +33,16 @@ import com.example.googlemapsapp.ui.composables.favorites.FavouritePlacesScreen
 import com.example.googlemapsapp.ui.composables.map.MapScreen
 import com.example.googlemapsapp.ui.composables.place_details.DetailsScreen
 import com.example.googlemapsapp.ui.composables.settings.SettingsScreen
+import com.example.googlemapsapp.utils.getRandomChar
 import com.example.googlemapsapp.utils.mapTypeParam
 import com.example.googlemapsapp.utils.trafficParam
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 import com.example.googlemapsapp.view_models.FavouritePlacesViewModel
 import com.example.googlemapsapp.view_models.MapViewModel
 import com.example.googlemapsapp.view_models.SettingsViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 sealed class Screen(
     val route: String,
@@ -297,5 +301,54 @@ fun MainScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun ConstructedHeader(
+    text: String
+) {
+    var changeNum = 3
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        text.forEach {
+            if(it != ' ') CharContainer(c = it.uppercaseChar(), changeNum++)
+            else Spacer(modifier = Modifier.width(8.dp))
+        }
+    }
+}
+
+@Composable
+fun CharContainer(
+    c: Char,
+    changeNum: Int
+) {
+    var value by remember { mutableStateOf(getRandomChar()) }
+
+    LaunchedEffect(Unit) {
+        for(i in 0 until changeNum) {
+            value = getRandomChar()
+            delay(50)
+        }
+        value = c
+    }
+
+    Box(
+        modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.onTertiary)
+            .widthIn(16.dp)
+            .clip(RoundedCornerShape(8.dp))
+    ) {
+        Text(
+            modifier = Modifier.padding(all = 4.dp),
+            text = value.toString(),
+            style = MaterialTheme.typography.headlineLarge
+        )
     }
 }

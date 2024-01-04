@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.googlemapsapp.ui.composables.ConstructedHeader
 import com.example.googlemapsapp.utils.mapTypeParam
 import com.google.maps.android.compose.MapType
 
@@ -43,12 +44,7 @@ fun SettingsScreen(
     val isTrafficEnabled = viewModel.isTrafficEnabled.observeAsState().value
 
     Column {
-        Text(
-            modifier = Modifier.clickable {
-                viewModel.updateSettings(settingTextParam, viewModel.settingText + "1")
-            },
-            text = viewModel.settingText
-        )
+        ConstructedHeader(text = "settings")
 
         MaxCurrentPlacesSetting(
             maxCurrentPlacesNumber = maxCurrentPlacesNumber,
@@ -110,7 +106,7 @@ fun MaxCurrentPlacesSetting(
             style = MaterialTheme.typography.bodyLarge
         )
         OutlinedTextField(
-            modifier = Modifier.widthIn(max = 50.dp),
+            modifier = Modifier.widthIn(max = 70.dp),
             value = maxCurrentPlacesNumber,
             textStyle = MaterialTheme.typography.bodyLarge,
             onValueChange = onValueChange,
