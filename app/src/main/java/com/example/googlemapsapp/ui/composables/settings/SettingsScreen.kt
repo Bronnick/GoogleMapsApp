@@ -2,6 +2,7 @@ package com.example.googlemapsapp.ui.composables.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
@@ -21,6 +22,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.googlemapsapp.utils.mapTypeParam
 import com.google.maps.android.compose.MapType
@@ -29,7 +31,8 @@ import com.google.maps.android.compose.MapType
 fun SettingsScreen(
     viewModel: SettingsViewModel,
     onMapTypeChanged: (String) -> Unit,
-    onTrafficChange: (Boolean) -> Unit
+    onTrafficChange: (Boolean) -> Unit,
+    onInvalidValueEnter: () -> Unit
 ) {
     var maxCurrentPlacesNumber by remember {
         mutableStateOf(viewModel.maxCurrentPlacesNumber.toString())
@@ -51,10 +54,14 @@ fun SettingsScreen(
             maxCurrentPlacesNumber = maxCurrentPlacesNumber,
             onValueChange = {
                 maxCurrentPlacesNumber = try {
-                    viewModel.updateSettings(maxCurrentPlacesNumberParam, it.toInt())
+                    if(it.length in 1..2)
+                        viewModel.updateSettings(maxCurrentPlacesNumberParam, it.toInt())
+                    else
+                        throw NumberFormatException()
                     it
                 } catch(e: NumberFormatException) {
-                    it
+                    onInvalidValueEnter()
+                    maxCurrentPlacesNumber
                 }
             }
         )
@@ -99,12 +106,16 @@ fun MaxCurrentPlacesSetting(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Max current places: "
+            text = "Max current places: ",
+            style = MaterialTheme.typography.bodyLarge
         )
         OutlinedTextField(
+            modifier = Modifier.widthIn(max = 50.dp),
             value = maxCurrentPlacesNumber,
-            textStyle = TextStyle(fontSize = 15.sp),
-            onValueChange = onValueChange
+            textStyle = MaterialTheme.typography.bodyLarge,
+            onValueChange = onValueChange,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            singleLine = true
         )
     }
 }
@@ -135,7 +146,8 @@ fun MapTypeSetting(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Map type: "
+            text = "Map type: ",
+            style = MaterialTheme.typography.bodyLarge
         )
         Box {
             Row(
@@ -161,7 +173,10 @@ fun MapTypeSetting(
             ) {
                 DropdownMenuItem(
                     text = {
-                        Text("Normal")
+                        Text(
+                            text = "Normal",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     },
                     onClick = {
                         onDropdownMenuItemSelect("Normal")
@@ -169,7 +184,10 @@ fun MapTypeSetting(
                 )
                 DropdownMenuItem(
                     text = {
-                        Text("Hybrid")
+                        Text(
+                            text = "Hybrid",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     },
                     onClick = {
                         onDropdownMenuItemSelect("Hybrid")
@@ -177,7 +195,10 @@ fun MapTypeSetting(
                 )
                 DropdownMenuItem(
                     text = {
-                        Text("Terrain")
+                        Text(
+                            text = "Terrain",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     },
                     onClick = {
                         onDropdownMenuItemSelect("Terrain")
@@ -188,13 +209,15 @@ fun MapTypeSetting(
     }
 }
 
+
 @Composable
 fun TrafficSetting(
     isTrafficEnabled: Boolean,
     onTrafficChange: (Boolean) -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(start = 4.dp, end = 4.dp, top = 8.dp, bottom = 8.dp)
             .drawBehind {
                 val borderSize = 1.dp
@@ -209,10 +232,14 @@ fun TrafficSetting(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround
     ) {
-        Text("Enable traffic")
+        Text(
+            text = "Enable traffic: ",
+            style = MaterialTheme.typography.bodyLarge
+        )
         Switch(
             checked = isTrafficEnabled,
-            onCheckedChange = onTrafficChange
+            onCheckedChange = onTrafficChange,
+            colors = SwitchDefaults.colors()
         )
     }
 }

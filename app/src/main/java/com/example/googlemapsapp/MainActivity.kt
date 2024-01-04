@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
 import com.example.googlemapsapp.repositories.PlacesRepository
 import com.example.googlemapsapp.ui.composables.MainScreen
 import com.example.googlemapsapp.ui.theme.GoogleMapsAppTheme
@@ -26,6 +27,8 @@ class MainActivity : ComponentActivity() {
         val currentPlacesViewModel: CurrentPlacesViewModel by viewModels()
         val favouritePlacesViewModel: FavouritePlacesViewModel by viewModels()
         val settingsViewModel: SettingsViewModel by viewModels()
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             GoogleMapsAppTheme {

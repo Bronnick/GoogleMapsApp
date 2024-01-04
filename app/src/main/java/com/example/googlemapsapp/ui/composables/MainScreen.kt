@@ -5,12 +5,14 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -36,6 +38,7 @@ import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 import com.example.googlemapsapp.view_models.FavouritePlacesViewModel
 import com.example.googlemapsapp.view_models.MapViewModel
 import com.example.googlemapsapp.view_models.SettingsViewModel
+import kotlinx.coroutines.launch
 
 sealed class Screen(
     val route: String,
@@ -88,6 +91,8 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val scope = rememberCoroutineScope()
 
     Scaffold(
@@ -113,6 +118,12 @@ fun MainScreen(
                     )
                 }
             }
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.imePadding()
+            )
         }
     ) {
         val onShowOnMapButtonClick: (Place) -> Unit = { place ->
@@ -277,6 +288,11 @@ fun MainScreen(
                         settingsViewModel.updateSettings(trafficParam, isTrafficEnabled)
                         settingsViewModel.setTraffic(isTrafficEnabled)
                         mapViewModel.setTraffic(isTrafficEnabled)
+                    },
+                    onInvalidValueEnter = {
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Invalid value entered!")
+                        }
                     }
                 )
             }
