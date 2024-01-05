@@ -1,10 +1,12 @@
 package com.example.googlemapsapp.ui.composables.settings
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -36,7 +38,7 @@ fun SettingsScreen(
     onInvalidValueEnter: () -> Unit
 ) {
     var maxCurrentPlacesNumber by remember {
-        mutableStateOf(viewModel.maxCurrentPlacesNumber.toString())
+        mutableStateOf(viewModel.maxCurrentPlacesNumber)
     }
 
     val showMapTypeDropdownMenu = viewModel.showMapTypeDropdownMenu.observeAsState().value
@@ -50,11 +52,11 @@ fun SettingsScreen(
             maxCurrentPlacesNumber = maxCurrentPlacesNumber,
             onValueChange = {
                 maxCurrentPlacesNumber = try {
-                    if(it.length in 1..2)
+                    if(it.toInt() in 1..20)
                         viewModel.updateSettings(maxCurrentPlacesNumberParam, it.toInt())
                     else
                         throw NumberFormatException()
-                    it
+                    it.toInt()
                 } catch(e: NumberFormatException) {
                     onInvalidValueEnter()
                     maxCurrentPlacesNumber
@@ -81,7 +83,7 @@ fun SettingsScreen(
 
 @Composable
 fun MaxCurrentPlacesSetting(
-    maxCurrentPlacesNumber: String,
+    maxCurrentPlacesNumber: Int,
     onValueChange: (String) -> Unit
 ) {
     Row(
@@ -105,14 +107,40 @@ fun MaxCurrentPlacesSetting(
             text = "Max current places: ",
             style = MaterialTheme.typography.bodyLarge
         )
-        OutlinedTextField(
-            modifier = Modifier.widthIn(max = 70.dp),
-            value = maxCurrentPlacesNumber,
-            textStyle = MaterialTheme.typography.bodyLarge,
-            onValueChange = onValueChange,
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            singleLine = true
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                text = maxCurrentPlacesNumber.toString(),
+                style = MaterialTheme.typography.displayMedium
+            )
+            Column(
+                verticalArrangement = Arrangement.Center
+            ) {
+                IconButton(
+                    modifier = Modifier.size(width = 40.dp, height = 30.dp),
+                    onClick = {
+                        onValueChange((maxCurrentPlacesNumber+1).toString())
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowDropUp,
+                        contentDescription = null
+                    )
+                }
+                IconButton(
+                    modifier = Modifier.size(width = 40.dp, height = 30.dp),
+                    onClick = {
+                        onValueChange((maxCurrentPlacesNumber-1).toString())
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowDropDown,
+                        contentDescription = null
+                    )
+                }
+            }
+        }
     }
 }
 
