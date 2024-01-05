@@ -95,9 +95,9 @@ fun GoogleMapsAppTheme(
     val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val colorScheme = when {
         dynamicColor && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
-        dynamicColor && !darkTheme -> dynamicDarkColorScheme(LocalContext.current)
+        dynamicColor && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
         darkTheme -> DarkColorScheme
-        else -> DarkColorScheme
+        else -> LightColorScheme
     }
 
     /*val colorScheme =
