@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.googlemapsapp.classes.Place
 import com.example.googlemapsapp.repositories.AppSettingsRepository
@@ -22,7 +24,7 @@ import javax.inject.Inject
 
 sealed interface CurrentPlacesUiState{
     data class Success(
-        val places: Flow<List<Place>>
+        val places: Flow<List<Place>>,
     ) : CurrentPlacesUiState
     object Loading : CurrentPlacesUiState
 
@@ -38,6 +40,10 @@ class CurrentPlacesViewModel @Inject constructor(
 ) : ViewModel() {
     val favoritePlaces: Flow<List<Place>> =
         currentPlacesRepository.getFavoritePlaces()
+
+    private val _isRefreshing = MutableLiveData(false)
+    val isRefreshing: LiveData<Boolean>
+        get() = _isRefreshing
 
     var currentPlacesUiState: CurrentPlacesUiState by mutableStateOf(CurrentPlacesUiState.Loading)
         private set
@@ -70,6 +76,8 @@ class CurrentPlacesViewModel @Inject constructor(
 
     fun refresh() {
         viewModelScope.launch {
+            _isRefreshing.value = true
+            currentPlacesUiState = CurrentPlacesUiState.Loading
             maxCurrentPlacesNumber = settingsRepository.getParameterByKey(
                 maxCurrentPlacesNumberParam
             ) as? Int ?: 10
@@ -153,6 +161,7 @@ class CurrentPlacesViewModel @Inject constructor(
                     Log.e("myLogs", "Place not found: ${exception.statusCode}")
                 }
             }
+            _isRefreshing.value = false
         }
     }
 

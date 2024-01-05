@@ -1,8 +1,14 @@
 package com.example.googlemapsapp.ui.composables.current_places
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.googlemapsapp.classes.Place
 import com.example.googlemapsapp.ui.composables.ConstructedHeader
@@ -15,7 +21,6 @@ fun CurrentPlacesScreen(
     onShowOnMapButtonClick: (Place) -> Unit,
     onViewDetailsButtonClick: (Place) -> Unit,
 ) {
-
     Column {
         ConstructedHeader(text = "Nearby Places")
 
@@ -30,5 +35,5 @@ fun CurrentPlacesScreen(
                 statusCode = currentPlacesUiState.statusCode
             )
         }
-    }
+   }
 }
