@@ -4,11 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import com.example.googlemapsapp.repositories.PlacesRepository
 import com.example.googlemapsapp.ui.composables.MainScreen
 import com.example.googlemapsapp.ui.theme.GoogleMapsAppTheme
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
@@ -16,7 +12,6 @@ import com.example.googlemapsapp.view_models.FavouritePlacesViewModel
 import com.example.googlemapsapp.view_models.MapViewModel
 import com.example.googlemapsapp.view_models.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

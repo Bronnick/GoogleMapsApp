@@ -1,6 +1,5 @@
 package com.example.googlemapsapp.view_models
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.*
@@ -12,7 +11,6 @@ import com.example.googlemapsapp.repositories.AppSettingsRepository
 import com.example.googlemapsapp.repositories.PlacesRepository
 import com.example.googlemapsapp.utils.maxCurrentPlacesNumberParam
 import com.google.android.gms.common.api.ApiException
-import com.google.android.libraries.places.api.model.PlaceLikelihood
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

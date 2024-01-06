@@ -3,7 +3,6 @@ package com.example.googlemapsapp.classes
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.android.gms.maps.model.LatLng
 
 @Entity(tableName = "places")
 data class Place (

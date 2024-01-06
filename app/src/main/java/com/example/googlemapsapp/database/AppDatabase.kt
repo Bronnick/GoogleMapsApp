@@ -6,13 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.googlemapsapp.classes.Place
 
-val DATABASE_NAME = "places_database"
-
 @Database(entities = [Place::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun placeDao(): PlaceDao
 
     companion object{
+        private const val DATABASE_NAME = "places_database"
+
         @Volatile private var instance: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {

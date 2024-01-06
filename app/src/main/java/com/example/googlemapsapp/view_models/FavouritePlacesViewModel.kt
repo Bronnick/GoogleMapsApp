@@ -1,7 +1,5 @@
 package com.example.googlemapsapp.view_models
 
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.googlemapsapp.repositories.PlacesRepository

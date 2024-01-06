@@ -1,12 +1,9 @@
 package com.example.googlemapsapp.ui.composables.current_places
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -18,7 +15,6 @@ import com.example.googlemapsapp.view_models.CurrentPlacesUiState
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun CurrentPlacesSuccessScreen(

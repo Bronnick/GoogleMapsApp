@@ -3,7 +3,6 @@ package com.example.googlemapsapp.di
 import android.content.Context
 import androidx.datastore.core.*
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import com.example.googlemapsapp.utils.dataStore
 import dagger.Module
 import dagger.Provides

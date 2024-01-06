@@ -105,7 +105,7 @@ fun MainScreen(
             .fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surface,
         bottomBar = {
-            NavigationBar() {
+            NavigationBar {
                 items.forEach{screen ->
                     NavigationBarItem(
                         icon = {Icon(screen.icon, contentDescription = null)},
