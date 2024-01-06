@@ -28,8 +28,10 @@ import com.google.maps.android.compose.*
 @Composable
 fun MapScreen(
     viewModel: MapViewModel,
+    name: String,
     latitude: Float,
-    longitude: Float
+    longitude: Float,
+    showCurrentPositionMarker: Boolean = false
 ) {
     val mapType = viewModel.mapType.observeAsState().value
     val isTrafficEnabled = viewModel.isTrafficEnabled.observeAsState().value
@@ -59,8 +61,8 @@ fun MapScreen(
     ) {
         PermissionsRequired(
             multiplePermissionsState = multiplePermissionState,
-            permissionsNotGrantedContent = { /* ... */ },
-            permissionsNotAvailableContent = { /* ... */ }
+            permissionsNotGrantedContent = { /* TODO */ },
+            permissionsNotAvailableContent = { /* TODO */ }
         ) {
             GoogleMap(
                 cameraPositionState = cameraPositionState,
@@ -78,12 +80,19 @@ fun MapScreen(
             ) {
                 displayedPlaces.forEach { place ->
                     PlaceMarker(
-                        place = place,
+                        name = place.name ?: "",
                         latitude = place.latitude,
                         longitude = place.longitude,
                         isColorDiffer = place.latitude.toFloat() == latitude &&
                                 place.longitude.toFloat() == longitude
                     )
+                }
+
+                if(showCurrentPositionMarker) {
+                    PlaceMarker(
+                        name = name, latitude = latitude.toDouble(), longitude = longitude.toDouble(), isColorDiffer = true
+                    )
+
                 }
             }
         }

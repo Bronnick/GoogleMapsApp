@@ -98,32 +98,30 @@ class CurrentPlacesViewModel @Inject constructor(
 
                 val placeLikelihoods = response?.placeLikelihoods
                 viewModelScope.launch {
-                    withContext(Dispatchers.IO) {
-                        for (placeLikelihood in placeLikelihoods ?: emptyList()) {
-                            withContext(Dispatchers.IO) {
-                                var isFavorite = false
-                                if (currentPlacesRepository.getPlaceById(placeLikelihood.place.id!!) != null) {
-                                    isFavorite = true
-                                }
+                    for (placeLikelihood in placeLikelihoods ?: emptyList()) {
+                        withContext(Dispatchers.IO) {
+                            var isFavorite = false
+                            if (currentPlacesRepository.getPlaceById(placeLikelihood.place.id!!) != null) {
+                                isFavorite = true
+                            }
 
-                                if(placesList.size < maxCurrentPlacesNumber) {
-                                    placesList.add(
-                                        Place(
-                                            placeId = placeLikelihood.place.id ?: "",
-                                            name = placeLikelihood.place.name ?: "undefined",
-                                            likelihood = placeLikelihood.likelihood,
-                                            latitude = placeLikelihood.place.latLng?.latitude
-                                                ?: 0.0,
-                                            longitude = placeLikelihood.place.latLng?.longitude
-                                                ?: 0.0,
-                                            photoRef = placeLikelihood.place.photoMetadatas?.get(0)
-                                                ?.zza(),
-                                            address = placeLikelihood.place.address,
-                                            rating = placeLikelihood.place.rating,
-                                            isFavorite = isFavorite
-                                        )
+                            if(placesList.size < maxCurrentPlacesNumber) {
+                                placesList.add(
+                                    Place(
+                                        placeId = placeLikelihood.place.id ?: "",
+                                        name = placeLikelihood.place.name ?: "undefined",
+                                        likelihood = placeLikelihood.likelihood,
+                                        latitude = placeLikelihood.place.latLng?.latitude
+                                            ?: 0.0,
+                                        longitude = placeLikelihood.place.latLng?.longitude
+                                            ?: 0.0,
+                                        photoRef = placeLikelihood.place.photoMetadatas?.get(0)
+                                            ?.zza(),
+                                        address = placeLikelihood.place.address,
+                                        rating = placeLikelihood.place.rating,
+                                        isFavorite = isFavorite
                                     )
-                                }
+                                )
                             }
                         }
                     }

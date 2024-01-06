@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -50,7 +51,7 @@ sealed class Screen(
     @StringRes val resourceId: Int
 ){
     object Map : Screen(
-        route = "home?lat={lat}&lng={lng}",
+        route = "home?name={name}&lat={lat}&lng={lng}&show={show}",
         icon = Icons.Filled.Map,
         resourceId = R.string.map_bottom_nav
     )
@@ -129,15 +130,21 @@ fun MainScreen(
                 modifier = Modifier.imePadding()
             )
         }
-    ) {
+    ) { it ->
         val onShowOnMapButtonClick: (Place) -> Unit = { place ->
             navController.navigate(
                 Screen.Map.route.replace(
+                    oldValue = "{name}",
+                    newValue = place.name.toString()
+                ).replace(
                     oldValue = "{lat}",
                     newValue = place.latitude.toString()
                 ).replace(
                     oldValue = "{lng}",
                     newValue = place.longitude.toString()
+                ).replace(
+                    oldValue = "{show}",
+                    newValue = true.toString()
                 )
             ) {
                 popUpTo(navController.graph.findStartDestination().id){
@@ -182,6 +189,10 @@ fun MainScreen(
             composable(
                 route = Screen.Map.route,
                 arguments = listOf(
+                    navArgument("name"){
+                        type = NavType.StringType
+                        defaultValue = " "
+                    },
                     navArgument("lat"){
                         type = NavType.FloatType
                         defaultValue = 44.810058
@@ -189,6 +200,10 @@ fun MainScreen(
                     navArgument("lng"){
                         type = NavType.FloatType
                         defaultValue = 20.4617586
+                    },
+                    navArgument("show"){
+                        type = NavType.BoolType
+                        defaultValue = false
                     }
                 ),
                 enterTransition = {
@@ -206,8 +221,10 @@ fun MainScreen(
             ) { navBackStackEntry ->
                 MapScreen(
                     viewModel = mapViewModel,
+                    name = navBackStackEntry.arguments?.getString("name") ?: " ",
                     latitude = navBackStackEntry.arguments?.getFloat("lat")!!,
-                    longitude = navBackStackEntry.arguments?.getFloat("lng")!!
+                    longitude = navBackStackEntry.arguments?.getFloat("lng")!!,
+                    showCurrentPositionMarker = navBackStackEntry.arguments?.getBoolean("show") ?: false
                 )
             }
             composable(

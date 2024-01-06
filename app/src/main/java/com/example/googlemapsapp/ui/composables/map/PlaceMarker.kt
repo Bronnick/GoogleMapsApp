@@ -9,7 +9,7 @@ import com.google.maps.android.compose.rememberMarkerState
 
 @Composable
 fun PlaceMarker(
-    place: Place,
+    name: String,
     latitude: Double,
     longitude: Double,
     isColorDiffer: Boolean
@@ -17,7 +17,7 @@ fun PlaceMarker(
     val color = if(isColorDiffer) BitmapDescriptorFactory.HUE_RED else BitmapDescriptorFactory.HUE_YELLOW
     Marker(
         state = rememberMarkerState(position = LatLng(latitude, longitude)),
-        title = place.name,
+        title = name,
         icon = BitmapDescriptorFactory.defaultMarker(color)
     )
 }
