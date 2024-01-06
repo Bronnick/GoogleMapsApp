@@ -38,29 +38,23 @@ class CurrentPlacesViewModel @Inject constructor(
     private val currentPlacesRepository: PlacesRepository,
     private val settingsRepository: AppSettingsRepository
 ) : ViewModel() {
-    val favoritePlaces: Flow<List<Place>> =
-        currentPlacesRepository.getFavoritePlaces()
+
+    var currentPlacesUiState: CurrentPlacesUiState by mutableStateOf(CurrentPlacesUiState.Loading)
+        private set
 
     private val _isRefreshing = MutableLiveData(false)
     val isRefreshing: LiveData<Boolean>
         get() = _isRefreshing
 
-    var currentPlacesUiState: CurrentPlacesUiState by mutableStateOf(CurrentPlacesUiState.Loading)
-        private set
+    private val placesList = ArrayList<Place>()
 
-    val placesList = ArrayList<Place>()
-
-    var maxCurrentPlacesNumber by mutableStateOf(10)
-        private set
-
-    var test: String by mutableStateOf("test")
+    private var maxCurrentPlacesNumber: Int = 10
 
     init {
         refresh()
     }
 
     fun refreshList() {
-        val copiedList = ArrayList<Place>()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 placesList.forEach { place ->
@@ -82,8 +76,7 @@ class CurrentPlacesViewModel @Inject constructor(
                 maxCurrentPlacesNumberParam
             ) as? Int ?: 10
             getCurrentPlaces()
-            val favoritePlaces = currentPlacesRepository.getFavoritePlaces()
-            favoritePlaces.collect {
+            /*favoritePlaces.collect {
                 for (item in it) {
                     for (el in placesList) {
                         if (el.placeId == item.placeId) {
@@ -92,7 +85,7 @@ class CurrentPlacesViewModel @Inject constructor(
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 
@@ -102,19 +95,6 @@ class CurrentPlacesViewModel @Inject constructor(
         placeResponse.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val response = task.result
-                for (placeLikelihood: PlaceLikelihood in response?.placeLikelihoods
-                    ?: emptyList()) {
-                    Log.i(
-                        "myLogs",
-                        "Id ${placeLikelihood.place.id} of Place '${placeLikelihood.place.name}' has likelihood: ${placeLikelihood.likelihood}"
-                    )
-                    Log.i("myLogs", "photo list size: ${placeLikelihood.place.photoMetadatas?.size}")
-
-                    for(photo in placeLikelihood.place.photoMetadatas ?: emptyList()){
-                        Log.i("myLogs", "photo: ${photo.zza()}")
-                    }
-                }
-
 
                 val placeLikelihoods = response?.placeLikelihoods
                 viewModelScope.launch {
@@ -149,8 +129,6 @@ class CurrentPlacesViewModel @Inject constructor(
                     }
                 }
 
-                Log.d("myLogs", "Max places number: $maxCurrentPlacesNumber")
-
                 val outerList = ArrayList<List<Place>>()
                 outerList.add(placesList)
                 currentPlacesUiState = CurrentPlacesUiState.Success(outerList.asFlow())
@@ -158,7 +136,6 @@ class CurrentPlacesViewModel @Inject constructor(
                 val exception = task.exception
                 if (exception is ApiException) {
                     currentPlacesUiState = CurrentPlacesUiState.Error(exception.statusCode)
-                    Log.e("myLogs", "Place not found: ${exception.statusCode}")
                 }
             }
             _isRefreshing.value = false
@@ -170,7 +147,6 @@ class CurrentPlacesViewModel @Inject constructor(
             (currentPlacesUiState as CurrentPlacesUiState.Success).places.
         }*/
         place.isFavorite = !place.isFavorite
-        Log.d("myLogs", "Place: ${place.name}, ${place.isFavorite}")
 
         if(place.isFavorite) {
             viewModelScope.launch {

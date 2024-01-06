@@ -25,21 +25,19 @@ class FavouritePlacesViewModel @Inject constructor(
         }
     }
 
-    fun changePlaceFavoriteStatus(place: Place) {
+    private fun changePlaceFavoriteStatus(place: Place) {
         /*try{
             (currentPlacesUiState as CurrentPlacesUiState.Success).places.
         }*/
-        var placeVar = place
-        placeVar = place.copy(isFavorite = !place.isFavorite)
-        Log.d("myLogs", "Place: ${place.name}, ${place.isFavorite}")
+        place.isFavorite = !place.isFavorite
 
-        if(placeVar.isFavorite) {
+        if(place.isFavorite) {
             viewModelScope.launch {
-                placesRepository.insertPlace(placeVar)
+                placesRepository.insertPlace(place)
             }
         } else{
             viewModelScope.launch {
-                placesRepository.deletePlace(placeVar)
+                placesRepository.deletePlace(place)
             }
         }
     }

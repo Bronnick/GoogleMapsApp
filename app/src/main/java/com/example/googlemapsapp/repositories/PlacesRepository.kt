@@ -34,7 +34,7 @@ class PlacesRepository @Inject constructor(
 
     fun getFavoritePlaces() = placeDao.getPlaces()
 
-    fun getPlaceById(placeId: String) = placeDao.getPlaceById(placeId)
+    suspend fun getPlaceById(placeId: String) = placeDao.getPlaceById(placeId)
 
     suspend fun insertPlace(place: Place) {
         placeDao.insertPlace(place)

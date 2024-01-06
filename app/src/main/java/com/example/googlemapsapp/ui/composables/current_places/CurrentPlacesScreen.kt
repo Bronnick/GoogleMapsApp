@@ -32,7 +32,10 @@ fun CurrentPlacesScreen(
             )
             is CurrentPlacesUiState.Loading -> CurrentPlacesLoadingScreen()
             is CurrentPlacesUiState.Error -> CurrentPlacesErrorScreen(
-                statusCode = currentPlacesUiState.statusCode
+                statusCode = currentPlacesUiState.statusCode,
+                onRetryClick = {
+                    viewModel.refresh()
+                }
             )
         }
    }

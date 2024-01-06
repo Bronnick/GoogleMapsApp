@@ -51,7 +51,7 @@ sealed class Screen(
 ){
     object Map : Screen(
         route = "home?lat={lat}&lng={lng}",
-        icon = Icons.Filled.Email,
+        icon = Icons.Filled.Map,
         resourceId = R.string.map_bottom_nav
     )
     object CurrentPlaces : Screen(
@@ -196,6 +196,12 @@ fun MainScreen(
                 },
                 exitTransition = {
                     ExitTransition.None
+                },
+                popEnterTransition = {
+                    EnterTransition.None
+                },
+                popExitTransition = {
+                    ExitTransition.None
                 }
             ) { navBackStackEntry ->
                 MapScreen(
@@ -211,6 +217,12 @@ fun MainScreen(
                 },
                 exitTransition = {
                     ExitTransition.None
+                },
+                popEnterTransition = {
+                    EnterTransition.None
+                },
+                popExitTransition = {
+                    ExitTransition.None
                 }
             ) {
                 CurrentPlacesScreen(
@@ -225,6 +237,12 @@ fun MainScreen(
                     EnterTransition.None
                 },
                 exitTransition = {
+                    ExitTransition.None
+                },
+                popEnterTransition = {
+                    EnterTransition.None
+                },
+                popExitTransition = {
                     ExitTransition.None
                 }
             ) {
@@ -263,6 +281,12 @@ fun MainScreen(
                 },
                 exitTransition = {
                     ExitTransition.None
+                },
+                popEnterTransition = {
+                    EnterTransition.None
+                },
+                popExitTransition = {
+                    ExitTransition.None
                 }
             ) { navBackStackEntry ->
                 DetailsScreen(
@@ -278,6 +302,12 @@ fun MainScreen(
                     EnterTransition.None
                 },
                 exitTransition = {
+                    ExitTransition.None
+                },
+                popEnterTransition = {
+                    EnterTransition.None
+                },
+                popExitTransition = {
                     ExitTransition.None
                 }
             ) {
