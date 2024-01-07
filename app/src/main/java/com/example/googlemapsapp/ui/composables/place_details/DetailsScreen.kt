@@ -18,6 +18,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.googlemapsapp.R
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import kotlin.math.roundToInt
 
 @Composable
 fun DetailsScreen(
@@ -94,8 +97,10 @@ fun PlaceDetails(
                 imageVector = ImageVector.vectorResource(id = R.drawable.baseline_star_rate_24),
                 contentDescription = null
             )
+
+
             Text(
-                text = rating.toString()
+                text = rating?.toBigDecimal()?.setScale(1, RoundingMode.CEILING)?.toDouble().toString()
             )
         }
     }

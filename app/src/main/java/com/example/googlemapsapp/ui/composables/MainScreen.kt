@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -84,6 +85,7 @@ val items = listOf(
     Screen.Settings
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     mapViewModel: MapViewModel,
@@ -104,23 +106,41 @@ fun MainScreen(
         modifier = Modifier
             .fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surface,
-        bottomBar = {
-            NavigationBar {
-                items.forEach{screen ->
-                    NavigationBarItem(
-                        icon = {Icon(screen.icon, contentDescription = null)},
-                        label = {Text(text = stringResource(screen.resourceId))},
-                        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                        onClick = {
-                            navController.navigate(screen.route){
-                                popUpTo(navController.graph.findStartDestination().id){
-                                    saveState  = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+        topBar = {
+            val route = navBackStackEntry?.destination?.route
+            if(route?.subSequence(0, route.length.coerceAtMost(7)) == "details") {
+                TopAppBar(
+                    title = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = null
+                            )
                         }
-                    )
+                    }
+                )
+            }
+        },
+        bottomBar = {
+            val route = navBackStackEntry?.destination?.route
+            if(route?.subSequence(0, route.length.coerceAtMost(7)) != "details") {
+                NavigationBar {
+                    items.forEach { screen ->
+                        NavigationBarItem(
+                            icon = { Icon(screen.icon, contentDescription = null) },
+                            label = { Text(text = stringResource(screen.resourceId)) },
+                            selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                            onClick = {
+                                navController.navigate(screen.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            }
+                        )
+                    }
                 }
             }
         },
@@ -360,7 +380,7 @@ fun ConstructedHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp),
+            .padding(top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
