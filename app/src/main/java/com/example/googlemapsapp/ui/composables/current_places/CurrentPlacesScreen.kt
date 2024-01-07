@@ -1,12 +1,17 @@
 package com.example.googlemapsapp.ui.composables.current_places
 
+import android.Manifest
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import com.example.googlemapsapp.classes.Place
 import com.example.googlemapsapp.ui.composables.ConstructedHeader
 import com.example.googlemapsapp.view_models.CurrentPlacesUiState
 import com.example.googlemapsapp.view_models.CurrentPlacesViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionsRequired
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CurrentPlacesScreen(
     viewModel: CurrentPlacesViewModel,

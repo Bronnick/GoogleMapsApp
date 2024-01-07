@@ -167,9 +167,9 @@ fun MainScreen(
                     newValue = true.toString()
                 )
             ) {
-                popUpTo(navController.graph.findStartDestination().id){
+                /*popUpTo(navController.graph.findStartDestination().id){
                     saveState  = true
-                }
+                }*/
                 launchSingleTop = true
                 //restoreState = true
             }
@@ -193,9 +193,9 @@ fun MainScreen(
 
             ) {
 
-                /*popUpTo(navController.graph.findStartDestination().id){
+                popUpTo(navController.graph.findStartDestination().id){
                     saveState  = true
-                }*/
+                }
                 launchSingleTop = true
                 //restoreState = true
             }
