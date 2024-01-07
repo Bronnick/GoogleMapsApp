@@ -22,9 +22,7 @@ fun CurrentPlacesSuccessScreen(
     onShowOnMapButtonClick: (Place) -> Unit,
     onViewDetailsButtonClick: (Place) -> Unit,
 ) {
-    val placeList by (viewModel.currentPlacesUiState as CurrentPlacesUiState.Success).places.collectAsState(
-        initial = emptyList()
-    )
+    val placeList = (viewModel.currentPlacesUiState as CurrentPlacesUiState.Success).places
 
     val isRefreshing by viewModel.isRefreshing.observeAsState()
 

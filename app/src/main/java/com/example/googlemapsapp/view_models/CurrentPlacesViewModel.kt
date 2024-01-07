@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 sealed interface CurrentPlacesUiState{
     data class Success(
-        val places: Flow<List<Place>>,
+        val places: List<Place>,
     ) : CurrentPlacesUiState
     object Loading : CurrentPlacesUiState
 
@@ -61,7 +61,7 @@ class CurrentPlacesViewModel @Inject constructor(
 
                 val outerList = ArrayList<List<Place>>()
                 outerList.add(placesList)
-                currentPlacesUiState = CurrentPlacesUiState.Success(outerList.asFlow())
+                currentPlacesUiState = CurrentPlacesUiState.Success(placesList)
             }
         }
     }
@@ -123,11 +123,11 @@ class CurrentPlacesViewModel @Inject constructor(
                             }
                         }
                     }
+                    currentPlacesUiState = CurrentPlacesUiState.Success(placesList)
                 }
 
                 val outerList = ArrayList<List<Place>>()
                 outerList.add(placesList)
-                currentPlacesUiState = CurrentPlacesUiState.Success(outerList.asFlow())
             } else {
                 val exception = task.exception
                 if (exception is ApiException) {
