@@ -37,6 +37,8 @@ class CurrentPlacesViewModel @Inject constructor(
     private val settingsRepository: AppSettingsRepository
 ) : ViewModel() {
 
+    private val LOCATION_ERROR_CODE = 111
+
     var currentPlacesUiState: CurrentPlacesUiState by mutableStateOf(CurrentPlacesUiState.Loading)
         private set
 
@@ -89,7 +91,14 @@ class CurrentPlacesViewModel @Inject constructor(
 
     private suspend fun getCurrentPlaces(){
         placesList.clear()
-        val placeResponse = currentPlacesRepository.getCurrentPlaces()
+
+        val placeResponse = try {
+            currentPlacesRepository.getCurrentPlaces()
+        } catch(e: Exception){
+            currentPlacesUiState = CurrentPlacesUiState.Error(LOCATION_ERROR_CODE)
+            return
+        }
+
         placeResponse.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val response = task.result

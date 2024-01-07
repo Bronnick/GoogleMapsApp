@@ -41,7 +41,7 @@ fun MapScreen(
     )
 
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(LatLng(latitude.toDouble(), longitude.toDouble()), 17f)
+        position = CameraPosition.fromLatLngZoom(LatLng(latitude.toDouble(), longitude.toDouble()), 11f)
     }
 
     LaunchedEffect(Unit) {

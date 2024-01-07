@@ -150,7 +150,7 @@ fun MainScreen(
                 modifier = Modifier.imePadding()
             )
         }
-    ) { it ->
+    ) {
         val onShowOnMapButtonClick: (Place) -> Unit = { place ->
             navController.navigate(
                 Screen.Map.route.replace(
@@ -203,7 +203,7 @@ fun MainScreen(
 
         NavHost(
             navController = navController,
-            startDestination = Screen.CurrentPlaces.route,
+            startDestination = Screen.Map.route,
             modifier = Modifier.padding(it)
         ) {
             composable(
@@ -215,11 +215,11 @@ fun MainScreen(
                     },
                     navArgument("lat"){
                         type = NavType.FloatType
-                        defaultValue = 44.810058
+                        defaultValue = 50.450001
                     },
                     navArgument("lng"){
                         type = NavType.FloatType
-                        defaultValue = 20.4617586
+                        defaultValue = 30.523333
                     },
                     navArgument("show"){
                         type = NavType.BoolType
