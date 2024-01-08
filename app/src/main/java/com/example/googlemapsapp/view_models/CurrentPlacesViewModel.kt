@@ -60,9 +60,6 @@ class CurrentPlacesViewModel @Inject constructor(
                 placesList.forEach { place ->
                     place.isFavorite = currentPlacesRepository.getPlaceById(place.placeId) != null
                 }
-
-                val outerList = ArrayList<List<Place>>()
-                outerList.add(placesList)
                 currentPlacesUiState = CurrentPlacesUiState.Success(placesList)
             }
         }
@@ -76,16 +73,6 @@ class CurrentPlacesViewModel @Inject constructor(
                 maxCurrentPlacesNumberParam
             ) as? Int ?: 10
             getCurrentPlaces()
-            /*favoritePlaces.collect {
-                for (item in it) {
-                    for (el in placesList) {
-                        if (el.placeId == item.placeId) {
-                            el.isFavorite = true
-                            Log.d("myLogs", "Place: ${item.placeId} ${el.placeId}")
-                        }
-                    }
-                }
-            }*/
         }
     }
 
@@ -134,9 +121,6 @@ class CurrentPlacesViewModel @Inject constructor(
                     }
                     currentPlacesUiState = CurrentPlacesUiState.Success(placesList)
                 }
-
-                val outerList = ArrayList<List<Place>>()
-                outerList.add(placesList)
             } else {
                 val exception = task.exception
                 if (exception is ApiException) {
