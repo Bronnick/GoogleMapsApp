@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.datastore.preferences.core.Preferences
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -33,20 +34,19 @@ class SettingsViewModel @Inject constructor(
         private set
 
     private val _showMapTypeDropdownMenu = MutableLiveData(false)
-    val showMapTypeDropdownMenu
+    val showMapTypeDropdownMenu: LiveData<Boolean>
         get() = _showMapTypeDropdownMenu
 
     private val _selectedMapTypeValue = MutableLiveData("Normal")
-        val selectedMapTypeValue
-            get() = _selectedMapTypeValue
+    val selectedMapTypeValue
+        get() = _selectedMapTypeValue
 
     private val _isTrafficEnabled = MutableLiveData(false)
-    val isTrafficEnabled
+    val isTrafficEnabled: LiveData<Boolean>
         get() = _isTrafficEnabled
 
     init{
         viewModelScope.launch {
-            settingText = settingsRepository.getParameterByKey(settingTextParam) as? String ?: ""
             maxCurrentPlacesNumber = settingsRepository.getParameterByKey(
                 maxCurrentPlacesNumberParam) as? Int ?: 10
             _selectedMapTypeValue.value = settingsRepository.getParameterByKey(mapTypeParam)
@@ -66,7 +66,6 @@ class SettingsViewModel @Inject constructor(
 
     fun <T> updateSettings(key: Preferences.Key<T>, newValue: T) {
         when(key) {
-            settingTextParam -> settingText = newValue as? String ?: ""
             maxCurrentPlacesNumberParam -> maxCurrentPlacesNumber = newValue as? Int ?: 10
             mapTypeParam -> selectedMapTypeValue.value = newValue as? String ?: "Normal"
         }

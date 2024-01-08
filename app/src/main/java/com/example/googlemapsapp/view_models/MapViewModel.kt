@@ -1,5 +1,6 @@
 package com.example.googlemapsapp.view_models
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,7 +28,7 @@ class MapViewModel @Inject constructor(
         get() = _mapType
 
     private val _isTrafficEnabled = MutableLiveData(false)
-    val isTrafficEnabled
+    val isTrafficEnabled: LiveData<Boolean>
         get() = _isTrafficEnabled
 
     init {
