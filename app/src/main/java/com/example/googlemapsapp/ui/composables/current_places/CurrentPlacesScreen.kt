@@ -3,6 +3,7 @@ package com.example.googlemapsapp.ui.composables.current_places
 import android.Manifest
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import com.example.googlemapsapp.classes.Place
 import com.example.googlemapsapp.ui.composables.ConstructedHeader
 import com.example.googlemapsapp.view_models.CurrentPlacesUiState
@@ -18,10 +19,18 @@ fun CurrentPlacesScreen(
     onShowOnMapButtonClick: (Place) -> Unit,
     onViewDetailsButtonClick: (Place) -> Unit,
 ) {
+    val currentPlacesUiState = viewModel.currentPlacesUiState
+
+    LaunchedEffect(Unit) {
+        if(currentPlacesUiState is CurrentPlacesUiState.Error) {
+            viewModel.refresh()
+        }
+    }
+
     Column {
         ConstructedHeader(text = "Nearby Places")
 
-        when (val currentPlacesUiState = viewModel.currentPlacesUiState) {
+        when (currentPlacesUiState) {
             is CurrentPlacesUiState.Success -> CurrentPlacesSuccessScreen(
                 viewModel = viewModel,
                 onShowOnMapButtonClick = onShowOnMapButtonClick,
