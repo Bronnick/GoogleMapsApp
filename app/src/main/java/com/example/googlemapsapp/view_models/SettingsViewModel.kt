@@ -28,8 +28,6 @@ class SettingsViewModel @Inject constructor(
     }
         private set*/
 
-    var settingText by mutableStateOf("Not yet implemented :(")
-
     var maxCurrentPlacesNumber by mutableStateOf(10)
         private set
 

@@ -50,6 +50,4 @@ class CurrentPlaceService @Inject constructor(
         return placesClient.findCurrentPlace(request)
 
     }
-
-
 }
