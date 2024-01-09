@@ -13,7 +13,8 @@ fun PlaceMarker(
     longitude: Double,
     isColorDiffer: Boolean
 ) {
-    val color = if(isColorDiffer) BitmapDescriptorFactory.HUE_RED else BitmapDescriptorFactory.HUE_YELLOW
+    val color =
+        if (isColorDiffer) BitmapDescriptorFactory.HUE_RED else BitmapDescriptorFactory.HUE_YELLOW
     Marker(
         state = rememberMarkerState(position = LatLng(latitude, longitude)),
         title = name,

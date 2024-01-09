@@ -26,15 +26,12 @@ fun CurrentPlacesSuccessScreen(
 
     val isRefreshing by viewModel.isRefreshing.observeAsState()
 
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing = isRefreshing ?: false),
+    SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = isRefreshing ?: false),
         onRefresh = {
             viewModel.refresh()
-        }
-    ) {
+        }) {
         LazyColumn(
-            state = rememberLazyListState(),
-            modifier = Modifier.fillMaxSize()
+            state = rememberLazyListState(), modifier = Modifier.fillMaxSize()
         ) {
             items(placeList) { place ->
                 PlaceOverview(

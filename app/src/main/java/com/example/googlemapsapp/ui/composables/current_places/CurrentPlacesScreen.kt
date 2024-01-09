@@ -22,7 +22,7 @@ fun CurrentPlacesScreen(
     val currentPlacesUiState = viewModel.currentPlacesUiState
 
     LaunchedEffect(Unit) {
-        if(currentPlacesUiState is CurrentPlacesUiState.Error) {
+        if (currentPlacesUiState is CurrentPlacesUiState.Error) {
             viewModel.refresh()
         }
     }
@@ -36,6 +36,7 @@ fun CurrentPlacesScreen(
                 onShowOnMapButtonClick = onShowOnMapButtonClick,
                 onViewDetailsButtonClick = onViewDetailsButtonClick
             )
+
             is CurrentPlacesUiState.Loading -> CurrentPlacesLoadingScreen()
             is CurrentPlacesUiState.Error -> CurrentPlacesErrorScreen(
                 statusCode = currentPlacesUiState.statusCode,
@@ -44,5 +45,5 @@ fun CurrentPlacesScreen(
                 }
             )
         }
-   }
+    }
 }

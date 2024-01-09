@@ -16,11 +16,11 @@ import javax.inject.Singleton
 @Singleton
 class CurrentPlaceService @Inject constructor(
     @ApplicationContext private val applicationContext: Context
-){
+) {
 
-    var placesClient: PlacesClient
+    private var placesClient: PlacesClient
 
-    init{
+    init {
         Places.initializeWithNewPlacesApiEnabled(
             applicationContext,
             "AIzaSyBlrwhE1xSDXu-sH-BCHpxRNLZy8iFKlek"

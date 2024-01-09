@@ -20,10 +20,11 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
-sealed interface CurrentPlacesUiState{
+sealed interface CurrentPlacesUiState {
     data class Success(
         val places: List<Place>,
     ) : CurrentPlacesUiState
+
     object Loading : CurrentPlacesUiState
 
     data class Error(
@@ -76,12 +77,12 @@ class CurrentPlacesViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getCurrentPlaces(){
+    private suspend fun getCurrentPlaces() {
         placesList.clear()
 
         val placeResponse = try {
             currentPlacesRepository.getCurrentPlaces()
-        } catch(e: Exception){
+        } catch (e: Exception) {
             currentPlacesUiState = CurrentPlacesUiState.Error(LOCATION_ERROR_CODE)
             return
         }
@@ -99,7 +100,7 @@ class CurrentPlacesViewModel @Inject constructor(
                                 isFavorite = true
                             }
 
-                            if(placesList.size < maxCurrentPlacesNumber) {
+                            if (placesList.size < maxCurrentPlacesNumber) {
                                 placesList.add(
                                     Place(
                                         placeId = placeLikelihood.place.id ?: "",
@@ -137,11 +138,11 @@ class CurrentPlacesViewModel @Inject constructor(
         }*/
         place.isFavorite = !place.isFavorite
 
-        if(place.isFavorite) {
+        if (place.isFavorite) {
             viewModelScope.launch {
                 currentPlacesRepository.insertPlace(place)
             }
-        } else{
+        } else {
             viewModelScope.launch {
                 currentPlacesRepository.deletePlace(place)
             }

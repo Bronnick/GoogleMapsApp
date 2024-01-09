@@ -43,10 +43,11 @@ class SettingsViewModel @Inject constructor(
     val isTrafficEnabled: LiveData<Boolean>
         get() = _isTrafficEnabled
 
-    init{
+    init {
         viewModelScope.launch {
             maxCurrentPlacesNumber = settingsRepository.getParameterByKey(
-                maxCurrentPlacesNumberParam) as? Int ?: 10
+                maxCurrentPlacesNumberParam
+            ) as? Int ?: 10
             _selectedMapTypeValue.value = settingsRepository.getParameterByKey(mapTypeParam)
                     as? String ?: "Normal"
             _isTrafficEnabled.value = settingsRepository.getParameterByKey(trafficParam) as? Boolean
@@ -63,7 +64,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun <T> updateSettings(key: Preferences.Key<T>, newValue: T) {
-        when(key) {
+        when (key) {
             maxCurrentPlacesNumberParam -> maxCurrentPlacesNumber = newValue as? Int ?: 10
             mapTypeParam -> selectedMapTypeValue.value = newValue as? String ?: "Normal"
         }
@@ -75,7 +76,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    companion object{
+    companion object {
         const val SETTINGS_TEXT_KEY = "settings_text_key"
     }
 }

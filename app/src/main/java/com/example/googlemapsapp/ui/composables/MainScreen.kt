@@ -50,27 +50,31 @@ sealed class Screen(
     val route: String,
     val icon: ImageVector,
     @StringRes val resourceId: Int
-){
+) {
     object Map : Screen(
         route = "home?name={name}&lat={lat}&lng={lng}&show={show}",
         icon = Icons.Filled.Map,
         resourceId = R.string.map_bottom_nav
     )
+
     object CurrentPlaces : Screen(
         route = "current_places",
         icon = Icons.Filled.Place,
         resourceId = R.string.current_places_bottom_nav
     )
+
     object FavoritePlaces : Screen(
         route = "favorite_places",
         icon = Icons.Filled.Favorite,
         resourceId = R.string.favorite_places_bottom_nav
     )
+
     object DetailsScreen : Screen(
         route = "details?name={name}&photoRef={photoRef}&address={address}&rating={rating}",
         icon = Icons.Filled.Check,
         resourceId = R.string.details_bottom_nav
     )
+
     object Settings : Screen(
         route = "settings",
         icon = Icons.Filled.Settings,
@@ -108,7 +112,7 @@ fun MainScreen(
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             val route = navBackStackEntry?.destination?.route
-            if(route?.subSequence(0, route.length.coerceAtMost(7)) == "details") {
+            if (route?.subSequence(0, route.length.coerceAtMost(7)) == "details") {
                 TopAppBar(
                     title = {
                         IconButton(onClick = { navController.popBackStack() }) {
@@ -123,7 +127,7 @@ fun MainScreen(
         },
         bottomBar = {
             val route = navBackStackEntry?.destination?.route
-            if(route?.subSequence(0, route.length.coerceAtMost(7)) != "details") {
+            if (route?.subSequence(0, route.length.coerceAtMost(7)) != "details") {
                 NavigationBar {
                     items.forEach { screen ->
                         NavigationBarItem(
@@ -191,7 +195,7 @@ fun MainScreen(
                     newValue = (place.rating ?: 0.0).toString()
                 ),
 
-            ) {
+                ) {
 
                 /*popUpTo(navController.graph.findStartDestination().id){
                     saveState  = true
@@ -209,19 +213,19 @@ fun MainScreen(
             composable(
                 route = Screen.Map.route,
                 arguments = listOf(
-                    navArgument("name"){
+                    navArgument("name") {
                         type = NavType.StringType
                         defaultValue = " "
                     },
-                    navArgument("lat"){
+                    navArgument("lat") {
                         type = NavType.FloatType
                         defaultValue = 50.450001
                     },
-                    navArgument("lng"){
+                    navArgument("lng") {
                         type = NavType.FloatType
                         defaultValue = 30.523333
                     },
-                    navArgument("show"){
+                    navArgument("show") {
                         type = NavType.BoolType
                         defaultValue = false
                     }
@@ -244,7 +248,8 @@ fun MainScreen(
                     name = navBackStackEntry.arguments?.getString("name") ?: " ",
                     latitude = navBackStackEntry.arguments?.getFloat("lat")!!,
                     longitude = navBackStackEntry.arguments?.getFloat("lng")!!,
-                    showCurrentPositionMarker = navBackStackEntry.arguments?.getBoolean("show") ?: false
+                    showCurrentPositionMarker = navBackStackEntry.arguments?.getBoolean("show")
+                        ?: false
                 )
             }
             composable(
@@ -296,19 +301,19 @@ fun MainScreen(
             composable(
                 route = Screen.DetailsScreen.route,
                 arguments = listOf(
-                    navArgument("name"){
+                    navArgument("name") {
                         type = NavType.StringType
                         defaultValue = ""
                     },
-                    navArgument("photoRef"){
+                    navArgument("photoRef") {
                         type = NavType.StringType
                         defaultValue = ""
                     },
-                    navArgument("address"){
+                    navArgument("address") {
                         type = NavType.StringType
                         defaultValue = ""
                     },
-                    navArgument("rating"){
+                    navArgument("rating") {
                         type = NavType.FloatType
                         defaultValue = 0.0
                     }
@@ -385,7 +390,7 @@ fun ConstructedHeader(
         horizontalArrangement = Arrangement.Center
     ) {
         text.forEach {
-            if(it != ' ') CharContainer(c = it.uppercaseChar(), changeNum++)
+            if (it != ' ') CharContainer(c = it.uppercaseChar(), changeNum++)
             else Spacer(modifier = Modifier.width(8.dp))
         }
     }
@@ -399,7 +404,7 @@ fun CharContainer(
     var value by remember { mutableStateOf(getRandomChar()) }
 
     LaunchedEffect(Unit) {
-        for(i in 0 until changeNum) {
+        for (i in 0 until changeNum) {
             value = getRandomChar()
             delay(50)
         }

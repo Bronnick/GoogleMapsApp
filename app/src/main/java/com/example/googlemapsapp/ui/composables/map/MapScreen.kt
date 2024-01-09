@@ -41,7 +41,8 @@ fun MapScreen(
     )
 
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(LatLng(latitude.toDouble(), longitude.toDouble()), 11f)
+        position =
+            CameraPosition.fromLatLngZoom(LatLng(latitude.toDouble(), longitude.toDouble()), 11f)
     }
 
     LaunchedEffect(Unit) {
@@ -83,9 +84,12 @@ fun MapScreen(
                     )
                 }
 
-                if(showCurrentPositionMarker) {
+                if (showCurrentPositionMarker) {
                     PlaceMarker(
-                        name = name, latitude = latitude.toDouble(), longitude = longitude.toDouble(), isColorDiffer = true
+                        name = name,
+                        latitude = latitude.toDouble(),
+                        longitude = longitude.toDouble(),
+                        isColorDiffer = true
                     )
 
                 }

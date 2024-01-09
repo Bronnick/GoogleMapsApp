@@ -73,13 +73,13 @@ fun PlaceDetails(
                 )
             }
             Text(
-                modifier = Modifier.padding(start=8.dp),
+                modifier = Modifier.padding(start = 8.dp),
                 text = "Name: $name"
             )
         }
 
         Row(
-            modifier = Modifier.padding(top=8.dp),
+            modifier = Modifier.padding(top = 8.dp),
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.baseline_location_on_24),
@@ -100,7 +100,8 @@ fun PlaceDetails(
 
 
             Text(
-                text = rating?.toBigDecimal()?.setScale(1, RoundingMode.CEILING)?.toDouble().toString()
+                text = rating?.toBigDecimal()?.setScale(1, RoundingMode.CEILING)?.toDouble()
+                    .toString()
             )
         }
     }

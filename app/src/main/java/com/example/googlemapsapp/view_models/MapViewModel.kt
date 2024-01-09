@@ -39,7 +39,7 @@ class MapViewModel @Inject constructor(
     }
 
     fun setMapType(value: String) {
-        _mapType.value = when(value) {
+        _mapType.value = when (value) {
             "Normal" -> MapType.NORMAL
             "Hybrid" -> MapType.HYBRID
             "Terrain" -> MapType.TERRAIN

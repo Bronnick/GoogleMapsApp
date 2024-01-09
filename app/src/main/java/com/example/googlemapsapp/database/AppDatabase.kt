@@ -10,13 +10,14 @@ import com.example.googlemapsapp.classes.Place
 abstract class AppDatabase : RoomDatabase() {
     abstract fun placeDao(): PlaceDao
 
-    companion object{
+    companion object {
         private const val DATABASE_NAME = "places_database"
 
-        @Volatile private var instance: AppDatabase? = null
+        @Volatile
+        private var instance: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
-            return instance ?: synchronized(this){
+            return instance ?: synchronized(this) {
                 instance ?: buildDatabase(context).also { instance = it }
             }
         }

@@ -17,7 +17,7 @@ class FavouritePlacesViewModel @Inject constructor(
     val favoritePlaces: Flow<List<Place>> =
         placesRepository.getFavoritePlaces()
 
-    fun deletePlace(place: Place){
+    fun deletePlace(place: Place) {
         viewModelScope.launch {
             changePlaceFavoriteStatus(place)
         }
@@ -29,11 +29,11 @@ class FavouritePlacesViewModel @Inject constructor(
         }*/
         place.isFavorite = !place.isFavorite
 
-        if(place.isFavorite) {
+        if (place.isFavorite) {
             viewModelScope.launch {
                 placesRepository.insertPlace(place)
             }
-        } else{
+        } else {
             viewModelScope.launch {
                 placesRepository.deletePlace(place)
             }

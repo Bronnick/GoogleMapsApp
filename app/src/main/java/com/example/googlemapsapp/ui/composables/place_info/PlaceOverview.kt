@@ -52,11 +52,12 @@ fun PlaceOverview(
                 .padding(start = 16.dp)
         ) {
 
-            if(place.photoRef?.trim()?.isNotEmpty() == true) {
+            if (place.photoRef?.trim()?.isNotEmpty() == true) {
                 AsyncImage(
                     /*model = place.photos[0].attributions.substringAfter('"')
                     .substringBefore('"'),*/
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier
+                        .padding(top = 16.dp)
                         .clip(RoundedCornerShape(8.dp)),
                     model = stringResource(
                         id = R.string.photo_ref,
@@ -66,7 +67,8 @@ fun PlaceOverview(
                 )
             } else {
                 Image(
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier
+                        .padding(top = 16.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .size(150.dp),
                     painter = BitmapPainter(ImageBitmap.imageResource(id = R.drawable.image_not_found)),
@@ -87,7 +89,7 @@ fun PlaceOverview(
                 .fillMaxWidth()
                 .padding(all = 8.dp)
         ) {
-            if(isFavoriteScreen) {
+            if (isFavoriteScreen) {
                 IconButton(
                     onClick = {
                         favoriteState = !favoriteState

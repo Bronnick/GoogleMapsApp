@@ -27,7 +27,7 @@ class PlacesRepository @Inject constructor(
             PackageManager.PERMISSION_GRANTED
         ) {
             return currentPlaceService.getCurrentLocationRequest()
-        } else{
+        } else {
             throw Exception()
         }
     }
