@@ -43,23 +43,4 @@ class PlacesRepository @Inject constructor(
     suspend fun deletePlace(place: Place) {
         placeDao.deletePlace(place)
     }
-
-    companion object {
-        @Volatile private var instance: PlacesRepository? = null
-
-        fun getInstance(
-            applicationContext: Context,
-            currentPlaceService: CurrentPlaceService,
-            placeDao: PlaceDao
-        ): PlacesRepository {
-            return instance ?: synchronized(this) {
-                instance ?: PlacesRepository(
-                    applicationContext,
-                    currentPlaceService,
-                    placeDao
-                ).also { instance = it }
-            }
-        }
-    }
-
 }
